@@ -21,11 +21,36 @@
       <li><strong>Regression Models</strong>: Predictive analytics on KPIs</li>
     </ul>
   </div>
+<html>
+<head>
+  <title>Braden's AI Chatbot</title>
+</head>
+<body>
+  <h2>Ask me anything about my resume or portfolio</h2>
+  <textarea id="userInput" rows="4" cols="50" placeholder="Type your question..."></textarea>
+  <br>
+  <button onclick="sendMessage()">Send</button>
+  <p id="response"></p>
 
-  <div class="section">
-    <h2>Ask My Resume (AI Bot)</h2>
-    <!-- Embed your chatbot here (Chatbase, CustomGPT, or custom iframe) -->
-    <iframe src="https://www.chatbase.co/chatbot-iframe/YOUR_BOT_ID_HERE"></iframe>
+  <script>
+    async function sendMessage() {
+      const userInput = document.getElementById("userInput").value;
+
+      const response = await fetch("https://YOUR_REPLIT_URL/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userInput })
+      });
+
+      const data = await response.json();
+      document.getElementById("response").innerText = data.reply || data.error;
+    }
+  </script>
+</body>
+</html>
+
   </div>
 
   <footer>
