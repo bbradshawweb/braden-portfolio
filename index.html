@@ -51,7 +51,7 @@
       });
 
       const data = await response.json();
-      log.innerHTML += `<div><strong>AI:</strong> ${data.reply}</div>`;
+      log.innerHTML += `<div><strong>AI:</strong> ${data.response}</div>`;
       log.scrollTop = log.scrollHeight;
     } catch (err) {
       log.innerHTML += `<div><em>Error contacting server.</em></div>`;
