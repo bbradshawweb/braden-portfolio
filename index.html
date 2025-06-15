@@ -91,18 +91,26 @@
     }
   }
 
-  function showTab(tabId) {
+ function showTab(tabId) {
+  // Hide all tabs first (with transition)
+  document.querySelectorAll('.tab-content').forEach(el => {
+    el.classList.add('opacity-0');
+    el.classList.remove('pointer-events-auto');
+    el.classList.add('pointer-events-none');
+  });
+
+  // Wait for transition to complete before hiding fully and showing new tab
+  setTimeout(() => {
     document.querySelectorAll('.tab-content').forEach(el => {
-      el.classList.add('opacity-0', 'pointer-events-none');
-      setTimeout(() => el.classList.add('hidden'), 300); // match fade duration
+      el.classList.add('hidden');
     });
 
     const target = document.getElementById('tab-' + tabId);
     target.classList.remove('hidden');
-    setTimeout(() => {
-      target.classList.remove('opacity-0', 'pointer-events-none');
-    }, 10);
-  }
+    target.classList.remove('opacity-0', 'pointer-events-none');
+    target.classList.add('pointer-events-auto');
+  }, 300); // match transition duration
+}
 
   window.onload = () => showTab('home');
 </script>
