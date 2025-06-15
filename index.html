@@ -19,7 +19,7 @@
     </nav>
 
     <!-- HOME Tab -->
-    <div id="tab-home" class="tab-content">
+    <div id="tab-home" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <section class="mb-6">
         <h1 class="text-2xl font-bold mb-2">Hi, I’m Braden 👋</h1>
         <p class="text-gray-700 text-md">
@@ -40,7 +40,7 @@
     </div>
 
     <!-- PORTFOLIO Tab -->
-    <div id="tab-portfolio" class="tab-content hidden">
+    <div id="tab-portfolio" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <h2 class="text-xl font-semibold mb-4">My Projects</h2>
       <div class="grid grid-cols-1 gap-4">
         <div class="p-4 border rounded-md bg-gray-50">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- CV Tab -->
-    <div id="tab-cv" class="tab-content hidden">
+    <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <h2 class="text-xl font-semibold mb-4">Curriculum Vitae</h2>
       <p class="mb-4">You can view or download my full CV below.</p>
       <iframe src="resume.pdf" class="w-full h-96 border rounded-md"></iframe>
@@ -91,9 +91,21 @@
       }
     }
 
-    function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => {
+      el.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => el.classList.add('hidden'), 300); // match fade duration
+    });
+
+    const target = document.getElementById('tab-' + tabId);
+    target.classList.remove('hidden');
+    setTimeout(() => {
+      target.classList.remove('opacity-0', 'pointer-events-none');
+    }, 10);
+  }
+
+  // Load Home tab by default
+  window.onload = () => showTab('home');
     }
 
     // Load Home tab by default
