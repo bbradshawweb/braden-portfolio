@@ -9,7 +9,7 @@
 <body class="bg-gray-100 text-gray-900 font-sans">
 
   <!-- Container -->
-  <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
+  <div id="main-container" class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 ease-in-out">
 
     <!-- Navigation Tabs -->
     <nav class="flex space-x-6 border-b pb-4 mb-6">
@@ -51,68 +51,72 @@
           <h3 class="font-semibold text-lg">Project 2</h3>
           <p class="text-sm text-gray-600">Another short description, ideally with a link to the repo or demo.</p>
         </div>
-        <!-- Add more projects here -->
       </div>
     </div>
 
-    <!-- CV Tab -->
+    <!-- CV Tab (wider + taller iframe) -->
     <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <h2 class="text-xl font-semibold mb-4">Curriculum Vitae</h2>
       <p class="mb-4">You can view or download my full CV below.</p>
-      <iframe src="resume.pdf" class="w-full h-96 border rounded-md"></iframe>
-      <!-- Optional: <a href="resume.pdf" download class="text-blue-600 hover:underline mt-2 inline-block">Download PDF</a> -->
+      <iframe src="resume.pdf" class="w-full h-[85vh] border rounded-md"></iframe>
     </div>
 
   </div>
 
   <!-- JavaScript -->
- <script>
-  async function sendMessage() {
-    const input = document.getElementById('user-input');
-    const message = input.value.trim();
-    if (!message) return;
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
 
-    const log = document.getElementById('chat-log');
-    log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
-    input.value = '';
+      const log = document.getElementById('chat-log');
+      log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
+      input.value = '';
 
-    try {
-      const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
+      try {
+        const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+        log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
+        log.scrollTop = log.scrollHeight;
+      } catch (err) {
+        log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
+      }
+    }
+
+    function showTab(tabId) {
+      // Shrink or expand container if viewing CV
+      const container = document.getElementById('main-container');
+      if (tabId === 'cv') {
+        container.classList.remove('max-w-4xl');
+        container.classList.add('max-w-7xl');
+      } else {
+        container.classList.remove('max-w-7xl');
+        container.classList.add('max-w-4xl');
+      }
+
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('opacity-0');
+        el.classList.remove('pointer-events-auto');
+        el.classList.add('pointer-events-none');
       });
 
-      const data = await response.json();
-      log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
-      log.scrollTop = log.scrollHeight;
-    } catch (err) {
-      log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
+      // After fade-out, switch visibility
+      setTimeout(() => {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        const target = document.getElementById('tab-' + tabId);
+        target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+        target.classList.add('pointer-events-auto');
+      }, 300); // match Tailwind fade duration
     }
-  }
 
- function showTab(tabId) {
-  // Hide all tabs first (with transition)
-  document.querySelectorAll('.tab-content').forEach(el => {
-    el.classList.add('opacity-0');
-    el.classList.remove('pointer-events-auto');
-    el.classList.add('pointer-events-none');
-  });
-
-  // Wait for transition to complete before hiding fully and showing new tab
-  setTimeout(() => {
-    document.querySelectorAll('.tab-content').forEach(el => {
-      el.classList.add('hidden');
-    });
-
-    const target = document.getElementById('tab-' + tabId);
-    target.classList.remove('hidden');
-    target.classList.remove('opacity-0', 'pointer-events-none');
-    target.classList.add('pointer-events-auto');
-  }, 300); // match transition duration
-}
-
-  window.onload = () => showTab('home');
-</script>
+    window.onload = () => showTab('home');
+  </script>
 </body>
 </html>
