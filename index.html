@@ -66,7 +66,7 @@
   </div>
 
   <!-- JavaScript -->
- <script>
+<script>
   async function sendMessage() {
     const input = document.getElementById('user-input');
     const message = input.value.trim();
@@ -91,26 +91,28 @@
     }
   }
 
- function showTab(tabId) {
-  // Hide all tabs first (with transition)
-  document.querySelectorAll('.tab-content').forEach(el => {
-    el.classList.add('opacity-0');
-    el.classList.remove('pointer-events-auto');
-    el.classList.add('pointer-events-none');
-  });
-
-  // Wait for transition to complete before hiding fully and showing new tab
-  setTimeout(() => {
+  function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => {
-      el.classList.add('hidden');
+      el.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => el.classList.add('hidden'), 300);
     });
 
     const target = document.getElementById('tab-' + tabId);
     target.classList.remove('hidden');
-    target.classList.remove('opacity-0', 'pointer-events-none');
-    target.classList.add('pointer-events-auto');
-  }, 300); // match transition duration
-}
+    setTimeout(() => {
+      target.classList.remove('opacity-0', 'pointer-events-none');
+    }, 10);
+
+    // Adjust layout based on active tab
+    const container = document.getElementById('main-container');
+    if (tabId === 'cv') {
+      container.classList.remove('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
+      container.classList.add('w-screen', 'h-screen', 'p-0', 'bg-gray-200');
+    } else {
+      container.classList.add('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
+      container.classList.remove('w-screen', 'h-screen', 'p-0', 'bg-gray-200');
+    }
+  }
 
   window.onload = () => showTab('home');
 </script>
