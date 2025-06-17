@@ -99,14 +99,14 @@
       setTimeout(() => el.classList.add('hidden'), 300);
     });
 
-    // Show the selected tab
+    // Show selected tab
     const target = document.getElementById('tab-' + tabId);
     target.classList.remove('hidden');
     setTimeout(() => {
       target.classList.remove('opacity-0', 'pointer-events-none');
     }, 10);
 
-    // Adjust layout for CV fullscreen
+    // Adjust container style
     const container = document.getElementById('main-container');
     if (tabId === 'cv') {
       container.classList.remove('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
@@ -117,7 +117,7 @@
     }
   }
 
-  window.onload = () => {
+  window.onload = function () {
     showTab('home');
   };
 </script>
