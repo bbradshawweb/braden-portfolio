@@ -8,9 +8,8 @@
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
 
-  <!-- Container -->
- <div id="main-container" class="mx-auto mt-10 transition-all duration-500">
-
+  <!-- Main Container -->
+  <div id="main-container" class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg transition-all duration-300">
 
     <!-- Navigation Tabs -->
     <nav class="flex space-x-6 border-b pb-4 mb-6">
@@ -20,7 +19,7 @@
     </nav>
 
     <!-- HOME Tab -->
-    <div id="tab-home" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
+    <div id="tab-home" class="tab-content transition-opacity duration-300 ease-in-out">
       <section class="mb-6">
         <h1 class="text-2xl font-bold mb-2">Hi, I’m Braden 👋</h1>
         <p class="text-gray-700 text-md">
@@ -28,8 +27,6 @@
           patterns in customer behavior. This assistant can answer questions about my experience, work, or background.
         </p>
       </section>
-
-      <!-- Chat Interface -->
       <section class="mt-8">
         <h2 class="text-xl font-semibold mb-2">Ask Me Anything</h2>
         <div id="chat-log" class="h-64 overflow-y-auto mb-4 p-4 bg-gray-50 rounded-md shadow-inner text-sm"></div>
@@ -41,7 +38,7 @@
     </div>
 
     <!-- PORTFOLIO Tab -->
-    <div id="tab-portfolio" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
+    <div id="tab-portfolio" class="tab-content transition-opacity duration-300 ease-in-out hidden opacity-0 pointer-events-none">
       <h2 class="text-xl font-semibold mb-4">My Projects</h2>
       <div class="grid grid-cols-1 gap-4">
         <div class="p-4 border rounded-md bg-gray-50">
@@ -52,74 +49,69 @@
           <h3 class="font-semibold text-lg">Project 2</h3>
           <p class="text-sm text-gray-600">Another short description, ideally with a link to the repo or demo.</p>
         </div>
-        <!-- Add more projects here -->
       </div>
     </div>
 
     <!-- CV Tab -->
-    <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
+    <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out hidden opacity-0 pointer-events-none">
       <h2 class="text-xl font-semibold mb-4">Curriculum Vitae</h2>
-      <p class="mb-4">You can view or download my full CV below.</p>
-      <iframe src="resume.pdf" class="w-full h-screen border-none"></iframe>
-      <!-- Optional: <a href="resume.pdf" download class="text-blue-600 hover:underline mt-2 inline-block">Download PDF</a> -->
+      <iframe src="resume.pdf" class="w-full h-[90vh] border rounded-md"></iframe>
     </div>
 
   </div>
 
   <!-- JavaScript -->
-<script>
-  async function sendMessage() {
-    const input = document.getElementById('user-input');
-    const message = input.value.trim();
-    if (!message) return;
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
 
-    const log = document.getElementById('chat-log');
-    log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
-    input.value = '';
+      const log = document.getElementById('chat-log');
+      log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
+      input.value = '';
 
-    try {
-      const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
+      try {
+        const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+        log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
+        log.scrollTop = log.scrollHeight;
+      } catch (err) {
+        log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
+      }
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => el.classList.add('hidden'), 300);
       });
 
-      const data = await response.json();
-      log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
-      log.scrollTop = log.scrollHeight;
-    } catch (err) {
-      log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
+      const active = document.getElementById('tab-' + tabId);
+      active.classList.remove('hidden');
+      setTimeout(() => {
+        active.classList.remove('opacity-0', 'pointer-events-none');
+      }, 10);
+
+      const container = document.getElementById('main-container');
+      if (tabId === 'cv') {
+        container.classList.remove('max-w-4xl', 'p-6', 'bg-white', 'rounded-2xl', 'shadow-lg');
+        container.classList.add('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
+      } else {
+        container.classList.remove('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
+        container.classList.add('max-w-4xl', 'p-6', 'bg-white', 'rounded-2xl', 'shadow-lg');
+      }
     }
-  }
 
-  function showTab(tabId) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(el => {
-      el.classList.add('opacity-0', 'pointer-events-none');
-      setTimeout(() => el.classList.add('hidden'), 300);
-    });
+    window.onload = () => {
+      showTab('home');
+    };
+  </script>
 
-    // Show selected tab
-    const target = document.getElementById('tab-' + tabId);
-    target.classList.remove('hidden');
-    setTimeout(() => {
-      target.classList.remove('opacity-0', 'pointer-events-none');
-    }, 10);
-
-    // Adjust container style
-    const container = document.getElementById('main-container');
-    if (tabId === 'cv') {
-      container.classList.remove('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
-      container.classList.add('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
-    } else {
-      container.classList.add('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
-      container.classList.remove('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
-    }
-  }
-
-  window.onload = function () {
-    showTab('home');
-  };
-</script>
 </body>
 </html>
