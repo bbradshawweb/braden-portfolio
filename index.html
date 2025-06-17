@@ -9,7 +9,8 @@
 <body class="bg-gray-100 text-gray-900 font-sans">
 
   <!-- Container -->
-  <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
+ <div id="main-container" class="mx-auto mt-10 transition-all duration-500">
+
 
     <!-- Navigation Tabs -->
     <nav class="flex space-x-6 border-b pb-4 mb-6">
@@ -59,7 +60,7 @@
     <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <h2 class="text-xl font-semibold mb-4">Curriculum Vitae</h2>
       <p class="mb-4">You can view or download my full CV below.</p>
-      <iframe src="resume.pdf" class="w-full h-96 border rounded-md"></iframe>
+      <iframe src="resume.pdf" class="w-full h-screen border-none"></iframe>
       <!-- Optional: <a href="resume.pdf" download class="text-blue-600 hover:underline mt-2 inline-block">Download PDF</a> -->
     </div>
 
@@ -92,29 +93,33 @@
   }
 
   function showTab(tabId) {
+    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(el => {
       el.classList.add('opacity-0', 'pointer-events-none');
       setTimeout(() => el.classList.add('hidden'), 300);
     });
 
+    // Show the selected tab
     const target = document.getElementById('tab-' + tabId);
     target.classList.remove('hidden');
     setTimeout(() => {
       target.classList.remove('opacity-0', 'pointer-events-none');
     }, 10);
 
-    // Adjust layout based on active tab
+    // Adjust layout for CV fullscreen
     const container = document.getElementById('main-container');
     if (tabId === 'cv') {
       container.classList.remove('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
-      container.classList.add('w-screen', 'h-screen', 'p-0', 'bg-gray-200');
+      container.classList.add('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
     } else {
       container.classList.add('max-w-4xl', 'p-6', 'rounded-2xl', 'shadow-lg', 'bg-white');
-      container.classList.remove('w-screen', 'h-screen', 'p-0', 'bg-gray-200');
+      container.classList.remove('w-full', 'min-h-screen', 'p-0', 'bg-gray-200');
     }
   }
 
-  window.onload = () => showTab('home');
+  window.onload = () => {
+    showTab('home');
+  };
 </script>
 </body>
 </html>
