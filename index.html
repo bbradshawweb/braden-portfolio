@@ -146,6 +146,17 @@
     }, 310);
   }
 
+      function showTab(tabId) {
+      // Shrink or expand container if viewing CV
+      const container = document.getElementById('main-container');
+      if (tabId === 'cv') {
+        container.classList.remove('max-w-4xl');
+        container.classList.add('max-w-7xl');
+      } else {
+        container.classList.remove('max-w-7xl');
+        container.classList.add('max-w-4xl');
+      }
+
   function showProject(projectId) {
     hideAllTabs();
 
