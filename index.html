@@ -123,7 +123,7 @@
     }
   }
 
-  function showTab(tabId) {
+  function hideAllTabs() {
     document.querySelectorAll('.tab-content').forEach(el => {
       el.classList.add('opacity-0');
       el.classList.remove('pointer-events-auto');
@@ -132,23 +132,47 @@
 
     setTimeout(() => {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      const target = document.getElementById('tab-' + tabId);
-      target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-      target.classList.add('pointer-events-auto');
     }, 300);
   }
 
+  function showTab(tabId) {
+    hideAllTabs();
+
+    setTimeout(() => {
+      const target = document.getElementById('tab-' + tabId);
+      if (!target) return;
+      target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      target.classList.add('pointer-events-auto');
+    }, 310);
+  }
+
   function showProject(projectId) {
-    document.getElementById('tab-portfolio').classList.add('hidden');
-    document.getElementById(projectId).classList.remove('hidden');
+    hideAllTabs();
+
+    setTimeout(() => {
+      const detail = document.getElementById(projectId);
+      if (!detail) return;
+      detail.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      detail.classList.add('pointer-events-auto');
+    }, 310);
   }
 
   function hideProject(projectId) {
-    document.getElementById(projectId).classList.add('hidden');
-    document.getElementById('tab-portfolio').classList.remove('hidden');
+    const detail = document.getElementById(projectId);
+    if (!detail) return;
+
+    detail.classList.add('opacity-0');
+    detail.classList.remove('pointer-events-auto');
+    detail.classList.add('pointer-events-none');
+
+    setTimeout(() => {
+      detail.classList.add('hidden');
+      showTab('portfolio');
+    }, 300);
   }
 
   window.onload = () => showTab('home');
 </script>
+
 </body>
 </html>
