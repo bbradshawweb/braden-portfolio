@@ -39,20 +39,54 @@
       </section>
     </div>
 
-    <!-- PORTFOLIO Tab -->
-    <div id="tab-portfolio" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
-      <h2 class="text-xl font-semibold mb-4">My Projects</h2>
-      <div class="grid grid-cols-1 gap-4">
-        <div class="p-4 border rounded-md bg-gray-50">
-          <h3 class="font-semibold text-lg">Project 1</h3>
-          <p class="text-sm text-gray-600">A brief description of what you built, how it works, and what you learned.</p>
-        </div>
-        <div class="p-4 border rounded-md bg-gray-50">
-          <h3 class="font-semibold text-lg">Project 2</h3>
-          <p class="text-sm text-gray-600">Another short description, ideally with a link to the repo or demo.</p>
-        </div>
-      </div>
+<!-- PORTFOLIO Tab -->
+<div id="tab-portfolio" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
+  <h2 class="text-xl font-semibold mb-4">My Projects</h2>
+  <div class="grid grid-cols-1 gap-4">
+    <!-- Project 1 Card -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project1-detail')">
+      <h3 class="font-semibold text-lg">Sales Funnel Attribution Model</h3>
+      <p class="text-sm text-gray-600">Multi-touch attribution across web, CRM, and transactional data</p>
     </div>
+
+    <!-- Project 2 Card -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project2-detail')">
+      <h3 class="font-semibold text-lg">Customer Retention Analysis</h3>
+      <p class="text-sm text-gray-600">Longitudinal modeling of churn and retention over time</p>
+    </div>
+  </div>
+</div>
+
+<!-- Project 1 Detail -->
+<div id="project1-detail" class="tab-content hidden">
+  <button onclick="hideProject('project1-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Sales Funnel Attribution Model</h2>
+  <p class="text-gray-700 mb-4">
+    I developed a custom multi-touch attribution model that integrates Google Analytics, CRM (Salesforce), and transaction data to quantify the influence of marketing channels across the full funnel.
+  </p>
+  <img src="https://via.placeholder.com/800x400?text=Attribution+Model+Graph" alt="Attribution Model Graph" class="rounded-md mb-4 w-full">
+  <ul class="list-disc list-inside text-gray-700">
+    <li>Unified tracking across web, CRM, and sales platforms</li>
+    <li>Used logistic regression to estimate conversion probabilities</li>
+    <li>Delivered weekly dashboards in Sigma for marketing leadership</li>
+  </ul>
+</div>
+
+<!-- Project 2 Detail -->
+<div id="project2-detail" class="tab-content hidden">
+  <button onclick="hideProject('project2-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Customer Retention Analysis</h2>
+  <p class="text-gray-700 mb-4">
+    I analyzed retention trends using a cohort-based approach, applying time-series methods and survival curves to understand dropoff patterns and what drives loyalty.
+  </p>
+  <img src="https://via.placeholder.com/800x400?text=Retention+Curve" alt="Retention Curve" class="rounded-md mb-4 w-full">
+  <ul class="list-disc list-inside text-gray-700">
+    <li>Segmented customers by acquisition source and engagement patterns</li>
+    <li>Applied Kaplan-Meier survival analysis for churn estimation</li>
+    <li>Informed new re-engagement strategies and product tweaks</li>
+  </ul>
+</div>
+
 
     <!-- CV Tab (wider + taller iframe) -->
     <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
@@ -64,59 +98,57 @@
   </div>
 
   <!-- JavaScript -->
-  <script>
-    async function sendMessage() {
-      const input = document.getElementById('user-input');
-      const message = input.value.trim();
-      if (!message) return;
+<script>
+  async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const message = input.value.trim();
+    if (!message) return;
 
-      const log = document.getElementById('chat-log');
-      log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
-      input.value = '';
+    const log = document.getElementById('chat-log');
+    log.innerHTML += `<div class="mb-2"><strong>You:</strong> ${message}</div>`;
+    input.value = '';
 
-      try {
-        const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: message })
-        });
-
-        const data = await response.json();
-        log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
-        log.scrollTop = log.scrollHeight;
-      } catch (err) {
-        log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
-      }
-    }
-
-    function showTab(tabId) {
-      // Shrink or expand container if viewing CV
-      const container = document.getElementById('main-container');
-      if (tabId === 'cv') {
-        container.classList.remove('max-w-4xl');
-        container.classList.add('max-w-7xl');
-      } else {
-        container.classList.remove('max-w-7xl');
-        container.classList.add('max-w-4xl');
-      }
-
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(el => {
-        el.classList.add('opacity-0');
-        el.classList.remove('pointer-events-auto');
-        el.classList.add('pointer-events-none');
+    try {
+      const response = await fetch('https://resume-chat-backend.onrender.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
       });
 
-      // After fade-out, switch visibility
-      setTimeout(() => {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        const target = document.getElementById('tab-' + tabId);
-        target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-        target.classList.add('pointer-events-auto');
-      }, 300); // match Tailwind fade duration
+      const data = await response.json();
+      log.innerHTML += `<div class="mb-2"><strong>AI:</strong> ${data.response}</div>`;
+      log.scrollTop = log.scrollHeight;
+    } catch (err) {
+      log.innerHTML += `<div class="text-red-500"><em>Error contacting server.</em></div>`;
     }
+  }
 
-    window.onload = () => showTab('home');
-  </script>
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => {
+      el.classList.add('opacity-0');
+      el.classList.remove('pointer-events-auto');
+      el.classList.add('pointer-events-none');
+    });
+
+    setTimeout(() => {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      target.classList.add('pointer-events-auto');
+    }, 300);
+  }
+
+  function showProject(projectId) {
+    document.getElementById('tab-portfolio').classList.add('hidden');
+    document.getElementById(projectId).classList.remove('hidden');
+  }
+
+  function hideProject(projectId) {
+    document.getElementById(projectId).classList.add('hidden');
+    document.getElementById('tab-portfolio').classList.remove('hidden');
+  }
+
+  window.onload = () => showTab('home');
+</script>
 </body>
 </html>
