@@ -135,20 +135,18 @@
     }, 300);
   }
 
-  function showTab(tabId) {
-    hideAllTabs();
+ function showTab(tabId) {
+  hideAllTabs();
 
-    setTimeout(() => {
-      const target = document.getElementById('tab-' + tabId);
-      if (!target) return;
-      target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-      target.classList.add('pointer-events-auto');
-    }, 310);
-  }
+  setTimeout(() => {
+    const target = document.getElementById('tab-' + tabId);
+    if (!target) return;
+    target.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+    target.classList.add('pointer-events-auto');
 
-      function showTab(tabId) {
-      // Shrink or expand container if viewing CV
-      const container = document.getElementById('main-container');
+    // Resize main container based on tab
+    const container = document.getElementById('main-container');
+    if (container) {
       if (tabId === 'cv') {
         container.classList.remove('max-w-4xl');
         container.classList.add('max-w-7xl');
@@ -156,6 +154,9 @@
         container.classList.remove('max-w-7xl');
         container.classList.add('max-w-4xl');
       }
+    }
+  }, 310);
+}
 
   function showProject(projectId) {
     hideAllTabs();
