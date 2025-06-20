@@ -21,10 +21,10 @@
     <!-- HOME Tab -->
     <div id="tab-home" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <section class="mb-6">
-        <h1 class="text-2xl font-bold mb-2">Hi, I’m Braden 👋</h1>
+        <h1 class="text-2xl font-bold mb-2">Hi, I’m Braden.</h1>
         <p class="text-gray-700 text-md">
           I’m a research-driven data scientist with a background in behavioral science and a passion for uncovering
-          patterns in customer behavior. This assistant can answer questions about my experience, work, or background.
+          patterns in customer behavior. This customized AI can answer questions about my experience, work, or background.
         </p>
       </section>
 
@@ -51,8 +51,14 @@
 
     <!-- Project 2 Card -->
     <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project2-detail')">
-      <h3 class="font-semibold text-lg">Customer Retention Analysis</h3>
-      <p class="text-sm text-gray-600">Longitudinal modeling of churn and retention over time</p>
+      <h3 class="font-semibold text-lg">Net Promoter Score and Feedback Analysis</h3>
+      <p class="text-sm text-gray-600">Visualization and objective outlining</p>
+    </div>
+
+       <!-- Project 3 Card -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project3-detail')">
+      <h3 class="font-semibold text-lg">Full Customer Outreach Automation</h3>
+      <p class="text-sm text-gray-600">Developing and maintaining a full cadence automation for all regular customer outreach</p>
     </div>
   </div>
 </div>
@@ -64,26 +70,47 @@
   <p class="text-gray-700 mb-4">
     I developed a custom multi-touch attribution model that integrates Google Analytics, CRM (Salesforce), and transaction data to quantify the influence of marketing channels across the full funnel.
   </p>
-  <img src="https://via.placeholder.com/800x400?text=Attribution+Model+Graph" alt="Attribution Model Graph" class="rounded-md mb-4 w-full">
+  <img src="images/project1.png" alt="Project 1 screenshot" class="rounded-lg shadow-md" />
   <ul class="list-disc list-inside text-gray-700">
     <li>Unified tracking across web, CRM, and sales platforms</li>
+    <li>Created a unified, organized table with web analytics, demographic predictors, and internal behvaiors</li>
     <li>Used logistic regression to estimate conversion probabilities</li>
+    <li>Generated >15 unique models to calculate and predict conversion rate</li>
     <li>Delivered weekly dashboards in Sigma for marketing leadership</li>
+    <li>Identified >10 key targets for leadership to implement improved targeting, resulting in improved conversion rate and lower CPAs</li>
   </ul>
 </div>
 
 <!-- Project 2 Detail -->
 <div id="project2-detail" class="tab-content hidden">
   <button onclick="hideProject('project2-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
-  <h2 class="text-2xl font-bold mb-2">Customer Retention Analysis</h2>
+  <h2 class="text-2xl font-bold mb-2">Net Promoter Score and Feedback Analysis</h2>
   <p class="text-gray-700 mb-4">
-    I analyzed retention trends using a cohort-based approach, applying time-series methods and survival curves to understand dropoff patterns and what drives loyalty.
+    Utilizing an anonymous feedback survey, outlined key objectives for Product and Marketing teams to emphasize based on feedback trends.
   </p>
-  <img src="https://via.placeholder.com/800x400?text=Retention+Curve" alt="Retention Curve" class="rounded-md mb-4 w-full">
+  <img src="images/project1.png" alt="Project 1 screenshot" class="rounded-lg shadow-md" />
   <ul class="list-disc list-inside text-gray-700">
-    <li>Segmented customers by acquisition source and engagement patterns</li>
-    <li>Applied Kaplan-Meier survival analysis for churn estimation</li>
-    <li>Informed new re-engagement strategies and product tweaks</li>
+    <li>Implemented automated, anonymized distribution of survey to ensure proper gathering techniques</li>
+    <li>Identified key objectives for the organization on a rolling basis based on continuous and nominal data</li>
+    <li>Implemented LLM (AI) analysis on open-ended feedback to draw patterns and identify strengths and weaknesses</li>
+    <li>Identified which pieces of the organization were associated with higher/lower NP Scores to stack-rank customer-perceived weaknesses</li>
+  </ul>
+</div>
+
+    <!-- Project 3 Detail -->
+<div id="project3-detail" class="tab-content hidden">
+  <button onclick="hideProject('project3-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Full Customer Outreach Automation</h2>
+  <p class="text-gray-700 mb-4">
+    I created a full, multi-medium outreach outreach inside a CRM (Salesforce) from conceptualization to implementation
+  </p>
+  <img src="images/project1.png" alt="Project 1 screenshot" class="rounded-lg shadow-md" />
+  <ul class="list-disc list-inside text-gray-700">
+    <li>Created, maintained, and organized cadence flow visualization to simplify viewing and changes from leadership</li>
+    <li>Outlined, implemented, and maintained the logic for consistent, clean outreach over the entire customer journey</li>
+    <li>Through the course of the project, touched and improved nearly every KPI in the organization through improved outreach</li>
+    <li>Boosted customer engagement and retention by 30%</li>
+    <li>Boosted full funnel conversion rate by 20%</li>
   </ul>
 </div>
 
