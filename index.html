@@ -63,6 +63,21 @@
   </div>
 </div>
 
+       <!-- Project 4 Card -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project4-detail')">
+      <h3 class="font-semibold text-lg">Side Project: Fully Automated Social Media Management Service</h3>
+      <p class="text-sm text-gray-600">Automatic selection, captioning, and posting of professional Meta Pages</p>
+    </div>
+  </div>
+</div>
+    <!-- Project 5 Card -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project5-detail')">
+      <h3 class="font-semibold text-lg">Side Project: Public Macroeconomic Recession Indicators</h3>
+      <p class="text-sm text-gray-600">Researching, aggregating, and exploring the influence of media usage and luxury purchases on perceived and objective economic factors</p>
+    </div>
+  </div>
+</div>
+
 <!-- Project 1 Detail -->
 <div id="project1-detail" class="tab-content hidden">
   <button onclick="hideProject('project1-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
@@ -113,8 +128,39 @@
     <li>Boosted full funnel conversion rate by 20%</li>
   </ul>
 </div>
-
-
+    <!-- Project 4 Detail -->
+<div id="project4-detail" class="tab-content hidden">
+  <button onclick="hideProject('project4-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Side Project: Fully Automated Social Media Management Service</h2>
+  <p class="text-gray-700 mb-4">
+    I developed and created an autonomous service with a series of commands and webhooks that would select media from a catalogue, caption it dynamically, post it, and manage responses.
+  </p>
+  <img src="images/project1.png" alt="Project 1 screenshot" class="rounded-lg shadow-md" />
+  <ul class="list-disc list-inside text-gray-700">
+    <li>Aimed to solve the problem of consistently managing a consistent social media presence, something that is important for growth, especially among young, less-funded startup ideas</li>
+    <li>On a custom interval, my service would select a random piece of media from a catalogue and send it via webhook to an AI API capable of image recognition</li>
+    <li>The API would return a caption for the media, along with the suggested target audiences</li>
+    <li>A post would then be created with a fully automatically generated caption</li>
+    <li>This service allowed for a consistent media presence to be created and maintained without a dedicated media representative, a service that would usually take anywhere from 20-40 hours/week</li>
+    <li>I also hooked up an auto-responder for comments, engagements, and direct messages to enable a fully hands-off approach to media management</li>
+    <li>With regular usage, the following for the test page grew exponentially, as Meta algorithms favor regular posters</li>
+  </ul>
+</div>
+    <!-- Project 5 Detail -->
+<div id="project5-detail" class="tab-content hidden">
+  <button onclick="hideProject('project5-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Side Project: Public Macroeconomic Recession Indicators</h2>
+  <p class="text-gray-700 mb-4">
+    Ongoing project exploring how publicly available trends around media usage and luxury purchase relate and predict to economic indicators. 
+  </p>
+  <img src="images/project1.png" alt="Project 1 screenshot" class="rounded-lg shadow-md" />
+  <ul class="list-disc list-inside text-gray-700">
+    <li>Aiming to identify if there is a directional relationship between luxury purchases made domestically (US), media usage, perceived "free time" and economic indicators</li>
+    <li>The primary indicators I aim to examine and use are GDP, Unemployment rate, and interest rates</li>
+    <li>I will also explore the interaction(s) between each of these indicators and common demographic variables as they relate to my predictor variables, such as media usage and unemployment rates by age</li>
+    <li>I aim to explore these relationships, as well as explore the potential of Media usage as an indicator of economic recession</li>
+  </ul>
+</div>
     <!-- CV Tab (wider + taller iframe) -->
     <div id="tab-cv" class="tab-content transition-opacity duration-300 ease-in-out opacity-0 hidden">
       <h2 class="text-xl font-semibold mb-4">Curriculum Vitae</h2>
