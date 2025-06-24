@@ -24,7 +24,7 @@
       <section class="mb-6">
         <h1 class="text-2xl font-bold mb-2">Hi, I’m Braden.</h1>
         <p class="text-gray-700 text-md">
-          Welcome to version 3.6.3 of my interactive Web Portfolio. I’m a research-driven data scientist with a background in behavioral science and a passion for uncovering
+          Welcome to version 3.6.4 of my interactive Web Portfolio. I’m a research-driven data scientist with a background in behavioral science and a passion for uncovering
           patterns in human behavior. This customized AI can answer questions about my experience, work, or background.
         </p>
       </section>
@@ -80,6 +80,12 @@
       <p class="text-sm text-gray-600">Taking large, unrelated issues and identifying insights and trends for business objectives</p>
     </div>
     
+       <!-- Project 7 Card- Misc Visualizations -->
+    <div class="p-4 border rounded-md bg-gray-50 cursor-pointer hover:bg-gray-100 transition" onclick="showProject('project7-detail')">
+      <h3 class="font-semibold text-lg">Example Dashboards, Charts, and Visualizations</h3>
+      <p class="text-sm text-gray-600">Collection of example analytical and exploratory analyses</p>
+    </div>
+
   </div>
 </div>
 
@@ -183,6 +189,29 @@
   </ul>
 </div>
 
+     <!-- Project 7 Detail -->
+<div id="project7-detail" class="tab-content hidden">
+  <button onclick="hideProject('project7-detail')" class="mb-4 text-blue-600 hover:underline">&larr; Back to Portfolio</button>
+  <h2 class="text-2xl font-bold mb-2">Example Dashboards, Charts, and Visualizations</h2>
+  <p class="text-gray-700 mb-4">
+    A visual carousel showing a variety of project visuals.
+  </p>
+
+  <!-- Carousel Container -->
+  <div class="relative w-full max-w-2xl mx-auto">
+    <div id="carousel-images" class="overflow-hidden rounded-lg">
+      <img src="project-assets/project7/Case Dashboard.png" class="carousel-image w-full" />
+      <img src="project-assets/project7/Nonlinear Model.png" class="carousel-image w-full hidden" />
+      <img src="project-assets/project7/Running Submit Rate.png" class="carousel-image w-full hidden" />
+      <img src="project-assets/project7/Sales Performance Dashboard.png" class="carousel-image w-full hidden" />
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button onclick="prevSlide()" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-r hover:bg-gray-700">&#10094;</button>
+    <button onclick="nextSlide()" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-l hover:bg-gray-700">&#10095;</button>
+  </div>
+</div>
+
 
 
     
@@ -281,6 +310,29 @@
     }, 300);
   }
 
+let currentSlide = 0;
+
+function showSlide(index) {
+  const slides = document.querySelectorAll('#carousel-images .carousel-image');
+  if (index >= slides.length) currentSlide = 0;
+  if (index < 0) currentSlide = slides.length - 1;
+
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('hidden', i !== currentSlide);
+  });
+}
+
+function nextSlide() {
+  currentSlide++;
+  showSlide(currentSlide);
+}
+
+function prevSlide() {
+  currentSlide--;
+  showSlide(currentSlide);
+}
+
+  
  window.onload = () => {
   showTab('home');
 
