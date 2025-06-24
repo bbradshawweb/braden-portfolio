@@ -280,11 +280,16 @@
     }, 300);
   }
 
-  window.onload = () => showTab('home');
+ window.onload = () => {
+  showTab('home');
+
   // Enter key listener for chat input
   document.getElementById('user-input').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       sendMessage();
+    }
+  });
+};
   
 </script>
 
