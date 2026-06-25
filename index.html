@@ -1261,7 +1261,7 @@
         <a href="#work">Work</a>
         <a href="#expertise">Expertise</a>
         <a href="#resume">Resume</a>
-        <a href="#ask-ai">Ask AI</a>
+        <a href="#ask-ai">Ask my resume</a>
         <a class="nav-cta" href="mailto:bradshaw.braden@gmail.com">Contact</a>
       </div>
     </nav>
@@ -1289,24 +1289,24 @@
               <span class="chat-badge">AI</span>
               <div>
                 <strong id="chat-heading">Ask my resume</strong>
-                <span id="chat-subtitle">Interactive CV helper</span>
+                <span id="chat-subtitle">Interactive resume chat</span>
               </div>
             </div>
             <span id="chat-status" class="chat-status" data-state="ready">Online</span>
           </div>
           <div class="prompt-panel">
-            <p id="prompt-intro">Start with a focused question. The assistant can summarize my experience across data science, Revenue Operations, automation, research, and analytics.</p>
-            <div id="prompt-chips" class="prompt-chips" aria-label="Suggested resume questions">
-              <button class="prompt-chip" type="button" data-prompt="How has Braden improved revenue operations?">Revenue ops impact</button>
-              <button class="prompt-chip" type="button" data-prompt="What analytics projects has Braden led?">Analytics projects</button>
-              <button class="prompt-chip" type="button" data-prompt="How does Braden combine behavioral science and data science?">Behavioral science</button>
-              <button class="prompt-chip" type="button" data-prompt="What tools does Braden use?">Tools and stack</button>
+            <p id="prompt-intro">Start with a focused question. Ask my resume about my experience across data science, Revenue Operations, automation, research, and analytics.</p>
+            <div id="prompt-chips" class="prompt-chips" aria-label="Suggested questions for my resume">
+              <button class="prompt-chip" type="button" data-prompt="What do you do for revenue growth?">Revenue growth</button>
+              <button class="prompt-chip" type="button" data-prompt="What analytics projects have you led?">Analytics projects</button>
+              <button class="prompt-chip" type="button" data-prompt="How do you combine behavioral science and data science?">Behavioral science</button>
+              <button class="prompt-chip" type="button" data-prompt="What tools do you use?">Tools and stack</button>
             </div>
           </div>
           <div id="chat-log" class="chat-log" aria-live="polite"></div>
           <form id="chat-form" class="chat-form">
-            <label class="sr-only" for="user-input">Ask a question about Braden</label>
-            <input id="user-input" name="message" type="text" autocomplete="off" placeholder="Ask about RevOps, analytics, automation, or research">
+            <label class="sr-only" for="user-input">Ask a question about my resume</label>
+            <input id="user-input" name="message" type="text" autocomplete="off" placeholder="Ask my resume about RevOps, analytics, automation, or research">
             <button class="button button-primary" type="submit">Send</button>
           </form>
         </aside>
@@ -1560,7 +1560,7 @@
         </div>
         <div class="contact-actions">
           <a class="button button-primary" href="mailto:bradshaw.braden@gmail.com">Email me</a>
-          <a class="button button-secondary" href="#ask-ai">Ask the AI assistant</a>
+          <a class="button button-secondary" href="#ask-ai">Ask my resume</a>
         </div>
       </div>
     </section>
@@ -1823,20 +1823,20 @@
     let siteContext = {
       positioning: "Data Scientist | Revenue Operations",
       summary: "Revenue Operations, data science, automation, analytics, and behavioral research",
-      initial_message: "Hi, I can answer questions about Braden's Revenue Operations work, data science projects, tools, research background, and resume highlights.",
+      initial_message: "Hi, ask me about my Revenue Operations Intelligence Platform, lead scoring and routing systems, data science projects, tools, research background, and resume highlights.",
       chat_config: {
-        subtitle: "Interactive CV helper",
-        placeholder: "Ask about RevOps, analytics, automation, or research",
+        subtitle: "Interactive resume chat",
+        placeholder: "Ask my resume about RevOps, analytics, automation, or research",
         status_ready: "Online",
         status_loading: "Loading context",
-        status_thinking: "Thinking",
+        status_thinking: "Waking up",
         status_waking: "Waking up",
         status_limited: "Try again soon",
         status_error: "Unavailable",
-        thinking_message: "Thinking through the resume and project context...",
-        waking_message: "The assistant may be waking up. Render free services sometimes need a moment after inactivity.",
-        unavailable_message: "I could not reach the resume assistant. Please try again in a moment.",
-        rate_limited_message: "The assistant is receiving a lot of traffic. Please wait a moment and try again."
+        thinking_message: "waking assistant up",
+        waking_message: "waking assistant up",
+        unavailable_message: "I could not reach my resume assistant. Please try again in a moment.",
+        rate_limited_message: "My resume assistant is receiving a lot of traffic. Please wait a moment and try again."
       },
       follow_up_prompts: [
         "Can you give me a concrete example?",
@@ -1853,7 +1853,7 @@
       const fallbackLabels = {
         ready: "Online",
         loading: "Loading context",
-        thinking: "Thinking",
+        thinking: "Waking up",
         waking: "Waking up",
         limited: "Try again soon",
         error: "Unavailable"
@@ -1898,6 +1898,11 @@
       return prompt
         .replace(/\?$/, "")
         .replace(/^How has Braden /, "")
+        .replace(/^How have you /, "")
+        .replace(/^How do you /, "")
+        .replace(/^What do you /, "")
+        .replace(/^What analytics projects have you /, "analytics projects ")
+        .replace(/^What tools do you /, "tools ")
         .replace(/^What /, "")
         .replace(/^How /, "")
         .replace(/^Which /, "")
@@ -2000,13 +2005,13 @@
       setChatBusy(true);
       setChatStatus("thinking");
 
-      const pending = appendMessage("assistant", chatConfig("thinking_message", "Thinking through the resume and project context..."));
+      const pending = appendMessage("assistant", chatConfig("thinking_message", "waking assistant up"));
       let finalState = "ready";
       const wakingTimer = setTimeout(() => {
         if (document.body.contains(pending)) {
           pending.querySelector("p").textContent = chatConfig(
             "waking_message",
-            "The assistant may be waking up. Render free services sometimes need a moment after inactivity."
+            "waking assistant up"
           );
           setChatStatus("waking");
         }
@@ -2043,16 +2048,16 @@
         pending.remove();
         if (error.name === "AbortError") {
           finalState = "waking";
-          appendMessage("notice", chatConfig("waking_message", "The assistant may be waking up. Please try again in a moment."));
+          appendMessage("notice", chatConfig("waking_message", "waking assistant up"));
         } else if (error.status === 429) {
           finalState = "limited";
           appendMessage("error", error.message || chatConfig("rate_limited_message", "The assistant is receiving a lot of traffic. Please wait a moment and try again."));
         } else if (error.status === 503) {
           finalState = "waking";
-          appendMessage("notice", error.message || chatConfig("waking_message", "The assistant may be waking up. Please try again in a moment."));
+          appendMessage("notice", error.message || chatConfig("waking_message", "waking assistant up"));
         } else {
           finalState = "error";
-          appendMessage("error", error.message || chatConfig("unavailable_message", "I could not reach the resume assistant. Please try again in a moment."));
+          appendMessage("error", error.message || chatConfig("unavailable_message", "I could not reach my resume assistant. Please try again in a moment."));
         }
       } finally {
         clearTimeout(wakingTimer);
