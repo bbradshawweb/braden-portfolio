@@ -4,8 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Braden Bradshaw is a data scientist and revenue operations builder focused on analytics, automation, attribution, and customer lifecycle systems.">
+  <meta name="author" content="Braden Bradshaw">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#12345b">
+  <link rel="canonical" href="https://bradenbradshaw.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bradenbradshaw.com/">
+  <meta property="og:title" content="Braden Bradshaw | Data Scientist & Revenue Operations">
+  <meta property="og:description" content="Revenue Operations powered by data science: analytics, automation, attribution, dashboards, and behavioral research.">
+  <meta property="og:site_name" content="Braden Bradshaw">
+  <meta property="og:image" content="https://bradenbradshaw.com/favicon.png">
+  <meta property="og:image:alt" content="Braden Bradshaw portfolio mark">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Braden Bradshaw | Data Scientist & Revenue Operations">
+  <meta name="twitter:description" content="Revenue Operations powered by data science: analytics, automation, attribution, dashboards, and behavioral research.">
+  <meta name="twitter:image" content="https://bradenbradshaw.com/favicon.png">
   <title>Braden Bradshaw | Data Scientist & Revenue Operations</title>
   <link rel="icon" href="favicon.png" type="image/png">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://bradenbradshaw.com/#person",
+          "name": "Braden Bradshaw",
+          "url": "https://bradenbradshaw.com/",
+          "email": "mailto:bradshaw.braden@gmail.com",
+          "jobTitle": "Data Scientist | Revenue Operations",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Pleasant Grove",
+            "addressRegion": "UT",
+            "addressCountry": "US"
+          },
+          "alumniOf": [
+            {
+              "@type": "CollegeOrUniversity",
+              "name": "Brigham Young University"
+            },
+            {
+              "@type": "CollegeOrUniversity",
+              "name": "University of Utah"
+            }
+          ],
+          "knowsAbout": [
+            "Revenue Operations",
+            "Data Science",
+            "Marketing Analytics",
+            "Product Analytics",
+            "Salesforce Automation",
+            "Attribution Modeling",
+            "Behavioral Research"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://bradenbradshaw.com/#website",
+          "url": "https://bradenbradshaw.com/",
+          "name": "Braden Bradshaw Portfolio",
+          "description": "Interactive portfolio and resume assistant for Braden Bradshaw.",
+          "about": {
+            "@id": "https://bradenbradshaw.com/#person"
+          }
+        }
+      ]
+    }
+  </script>
   <style>
     :root {
       --bg: #f6f8fb;
@@ -393,6 +458,17 @@
       width: 0.5rem;
     }
 
+    .chat-status[data-state="loading"]::before,
+    .chat-status[data-state="thinking"]::before,
+    .chat-status[data-state="waking"]::before {
+      background: #f59e0b;
+    }
+
+    .chat-status[data-state="limited"]::before,
+    .chat-status[data-state="error"]::before {
+      background: #e11d48;
+    }
+
     .prompt-panel {
       background: linear-gradient(180deg, #f7fbff, white);
       border-bottom: 1px solid var(--line);
@@ -511,6 +587,12 @@
       align-self: flex-start;
       background: #fff1f2;
       color: #9f1239;
+    }
+
+    .message-notice {
+      align-self: flex-start;
+      background: #fff8e6;
+      color: #7a4b00;
     }
 
     .chat-form {
@@ -1205,7 +1287,7 @@
                 <span id="chat-subtitle">Interactive CV helper</span>
               </div>
             </div>
-            <span class="chat-status">Online</span>
+            <span id="chat-status" class="chat-status" data-state="ready">Online</span>
           </div>
           <div class="prompt-panel">
             <p id="prompt-intro">Start with a focused question. The assistant can summarize my experience across data science, Revenue Operations, automation, research, and analytics.</p>
@@ -1716,17 +1798,60 @@
     const promptChips = document.getElementById("prompt-chips");
     const promptIntro = document.getElementById("prompt-intro");
     const chatSubtitle = document.getElementById("chat-subtitle");
+    const chatStatus = document.getElementById("chat-status");
+    const CHAT_TIMEOUT_MS = 35000;
+    const CONTEXT_TIMEOUT_MS = 10000;
     const conversationHistory = [];
     let siteContext = {
       positioning: "Data Scientist | Revenue Operations",
       summary: "Revenue Operations, data science, automation, analytics, and behavioral research",
       initial_message: "Hi, I can answer questions about Braden's Revenue Operations work, data science projects, tools, research background, and resume highlights.",
+      chat_config: {
+        subtitle: "Interactive CV helper",
+        placeholder: "Ask about RevOps, analytics, automation, or research",
+        status_ready: "Online",
+        status_loading: "Loading context",
+        status_thinking: "Thinking",
+        status_waking: "Waking up",
+        status_limited: "Try again soon",
+        status_error: "Unavailable",
+        thinking_message: "Thinking through the resume and project context...",
+        waking_message: "The assistant may be waking up. Render free services sometimes need a moment after inactivity.",
+        unavailable_message: "I could not reach the resume assistant. Please try again in a moment.",
+        rate_limited_message: "The assistant is receiving a lot of traffic. Please wait a moment and try again."
+      },
       follow_up_prompts: [
         "Can you give me a concrete example?",
         "Which project best shows that skill?",
         "How would that translate to a business role?"
       ]
     };
+
+    function chatConfig(key, fallback) {
+      return siteContext.chat_config?.[key] || fallback;
+    }
+
+    function setChatStatus(state, label) {
+      const fallbackLabels = {
+        ready: "Online",
+        loading: "Loading context",
+        thinking: "Thinking",
+        waking: "Waking up",
+        limited: "Try again soon",
+        error: "Unavailable"
+      };
+      const configKey = `status_${state}`;
+      chatStatus.dataset.state = state;
+      chatStatus.textContent = label || chatConfig(configKey, fallbackLabels[state] || "Online");
+    }
+
+    function fetchWithTimeout(url, options = {}, timeoutMs = CHAT_TIMEOUT_MS) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      return fetch(url, { ...options, signal: controller.signal }).finally(() => {
+        clearTimeout(timeoutId);
+      });
+    }
 
     function appendMessage(role, text) {
       const message = document.createElement("div");
@@ -1822,15 +1947,17 @@
     }
 
     async function loadChatContext() {
+      setChatStatus("loading");
       try {
-        const response = await fetch(CONTEXT_URL, { headers: { "Accept": "application/json" } });
+        const response = await fetchWithTimeout(CONTEXT_URL, { headers: { "Accept": "application/json" } }, CONTEXT_TIMEOUT_MS);
         if (!response.ok) throw new Error("Context request failed");
         const data = await response.json();
+        const defaultChatConfig = siteContext.chat_config || {};
         siteContext = { ...siteContext, ...data };
+        siteContext.chat_config = { ...defaultChatConfig, ...(data.chat_config || {}) };
 
-        if (siteContext.positioning) {
-          chatSubtitle.textContent = siteContext.positioning;
-        }
+        chatSubtitle.textContent = chatConfig("subtitle", siteContext.positioning || "Interactive CV helper");
+        chatInput.placeholder = chatConfig("placeholder", chatInput.placeholder);
 
         if (siteContext.chat_intro) {
           promptIntro.textContent = siteContext.chat_intro;
@@ -1839,6 +1966,8 @@
         renderPromptChips(siteContext.prompt_chips || siteContext.suggested_prompts);
       } catch (error) {
         // Keep the built-in fallback prompts if the backend context is unavailable.
+      } finally {
+        setChatStatus("ready");
       }
     }
 
@@ -1851,11 +1980,22 @@
       conversationHistory.push({ role: "user", content: message });
       chatInput.value = "";
       setChatBusy(true);
+      setChatStatus("thinking");
 
-      const pending = appendMessage("assistant", "Thinking through the resume and project context...");
+      const pending = appendMessage("assistant", chatConfig("thinking_message", "Thinking through the resume and project context..."));
+      let finalState = "ready";
+      const wakingTimer = setTimeout(() => {
+        if (document.body.contains(pending)) {
+          pending.querySelector("p").textContent = chatConfig(
+            "waking_message",
+            "The assistant may be waking up. Render free services sometimes need a moment after inactivity."
+          );
+          setChatStatus("waking");
+        }
+      }, 4500);
 
       try {
-        const response = await fetch(API_URL, {
+        const response = await fetchWithTimeout(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1867,11 +2007,14 @@
               context_version: siteContext.version
             }
           })
-        });
+        }, CHAT_TIMEOUT_MS);
 
         const data = await response.json();
         if (!response.ok || data.error) {
-          throw new Error(data.error || "Server error");
+          const error = new Error(data.message || data.error || "Server error");
+          error.status = response.status;
+          error.payload = data;
+          throw error;
         }
 
         const answer = data.response || "I could not find a response for that question.";
@@ -1880,9 +2023,23 @@
         renderFollowUps(data.suggested_followups || siteContext.follow_up_prompts);
       } catch (error) {
         pending.remove();
-        appendMessage("error", "I could not reach the resume assistant. Please try again in a moment.");
+        if (error.name === "AbortError") {
+          finalState = "waking";
+          appendMessage("notice", chatConfig("waking_message", "The assistant may be waking up. Please try again in a moment."));
+        } else if (error.status === 429) {
+          finalState = "limited";
+          appendMessage("error", error.message || chatConfig("rate_limited_message", "The assistant is receiving a lot of traffic. Please wait a moment and try again."));
+        } else if (error.status === 503) {
+          finalState = "waking";
+          appendMessage("notice", error.message || chatConfig("waking_message", "The assistant may be waking up. Please try again in a moment."));
+        } else {
+          finalState = "error";
+          appendMessage("error", error.message || chatConfig("unavailable_message", "I could not reach the resume assistant. Please try again in a moment."));
+        }
       } finally {
+        clearTimeout(wakingTimer);
         setChatBusy(false);
+        setChatStatus(finalState);
         chatInput.focus();
       }
     }
