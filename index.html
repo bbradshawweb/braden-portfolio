@@ -542,6 +542,86 @@
       outline: none;
     }
 
+    .contact-handoff {
+      align-self: stretch;
+      background: #f7fbff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 0.75rem;
+      padding: 0.9rem;
+    }
+
+    .contact-handoff h3 {
+      color: var(--navy);
+      font-size: 0.98rem;
+      margin: 0;
+    }
+
+    .contact-handoff p {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin: 0;
+    }
+
+    .contact-grid-form {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .contact-field {
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .contact-field-wide {
+      grid-column: 1 / -1;
+    }
+
+    .contact-field label {
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      font: inherit;
+      min-width: 0;
+      padding: 0.68rem 0.72rem;
+    }
+
+    .contact-field textarea {
+      min-height: 8rem;
+      resize: vertical;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      border-color: var(--blue);
+      outline: 3px solid rgba(37, 99, 235, 0.14);
+    }
+
+    .contact-actions-row {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: flex-end;
+    }
+
+    .contact-actions-row button {
+      border: 0;
+    }
+
     .chat-log {
       display: flex;
       flex: 1;
@@ -1213,6 +1293,10 @@
         height: min(620px, 78vh);
       }
 
+      .contact-grid-form {
+        grid-template-columns: 1fr;
+      }
+
       .button,
       .chat-form button {
         width: 100%;
@@ -1295,7 +1379,7 @@
             <span id="chat-status" class="chat-status" data-state="ready">Online</span>
           </div>
           <div class="prompt-panel">
-            <p id="prompt-intro">Start with a focused question. Ask my resume about my experience across data science, Revenue Operations, automation, research, and analytics.</p>
+            <p id="prompt-intro">Ask my resume about my experience across data science, Revenue Operations, automation, research, and analytics. I may ask a quick follow-up so I can point you to the strongest evidence.</p>
             <div id="prompt-chips" class="prompt-chips" aria-label="Suggested questions for my resume">
               <button class="prompt-chip" type="button" data-prompt="What do you do for revenue growth?">Revenue growth</button>
               <button class="prompt-chip" type="button" data-prompt="What analytics projects have you led?">Analytics projects</button>
@@ -1810,6 +1894,7 @@
     const API_BASE_URL = "https://resume-chat-backend.onrender.com";
     const API_URL = `${API_BASE_URL}/chat`;
     const CONTEXT_URL = `${API_BASE_URL}/context`;
+    const CONTACT_URL = `${API_BASE_URL}/contact`;
     const chatLog = document.getElementById("chat-log");
     const chatForm = document.getElementById("chat-form");
     const chatInput = document.getElementById("user-input");
@@ -1819,11 +1904,12 @@
     const chatStatus = document.getElementById("chat-status");
     const CHAT_TIMEOUT_MS = 35000;
     const CONTEXT_TIMEOUT_MS = 10000;
+    const CONTACT_TIMEOUT_MS = 15000;
     const conversationHistory = [];
     let siteContext = {
       positioning: "Data Scientist | Revenue Operations",
       summary: "Revenue Operations, data science, automation, analytics, and behavioral research",
-      initial_message: "Hi, ask me about my Revenue Operations Intelligence Platform, lead scoring and routing systems, data science projects, tools, research background, and resume highlights.",
+      initial_message: "Hi, ask me about my Revenue Operations Intelligence Platform, lead scoring and routing systems, data science projects, tools, research background, and resume highlights. What are you trying to evaluate first?",
       chat_config: {
         subtitle: "Interactive resume chat",
         placeholder: "Ask my resume about RevOps, analytics, automation, or research",
@@ -1943,6 +2029,10 @@
       chatLog.querySelectorAll(".follow-up-row").forEach((row) => row.remove());
     }
 
+    function removeContactHandoffs() {
+      chatLog.querySelectorAll(".contact-handoff").forEach((card) => card.remove());
+    }
+
     function renderFollowUps(items) {
       const normalized = (items || []).map(normalizePromptItem).filter(Boolean).slice(0, 3);
       if (!normalized.length) return;
@@ -1967,6 +2057,133 @@
 
       chatLog.appendChild(row);
       chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function createContactField(labelText, name, options = {}) {
+      const wrapper = document.createElement("div");
+      wrapper.className = options.wide ? "contact-field contact-field-wide" : "contact-field";
+
+      const label = document.createElement("label");
+      const inputId = `contact-${name}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      label.htmlFor = inputId;
+      label.textContent = labelText;
+
+      const field = options.multiline ? document.createElement("textarea") : document.createElement("input");
+      field.id = inputId;
+      field.name = name;
+      field.placeholder = options.placeholder || "";
+      field.value = options.value || "";
+      if (options.type) field.type = options.type;
+      if (options.required) field.required = true;
+      if (options.autocomplete) field.autocomplete = options.autocomplete;
+
+      wrapper.append(label, field);
+      return wrapper;
+    }
+
+    function renderContactHandoff(handoff) {
+      if (!handoff?.enabled) return false;
+
+      removeFollowUps();
+      removeContactHandoffs();
+
+      const card = document.createElement("section");
+      card.className = "contact-handoff";
+
+      const title = document.createElement("h3");
+      title.textContent = "Send me this conversation";
+
+      const intro = document.createElement("p");
+      intro.textContent = "If this is worth continuing, review the summary and add your contact info. I will get the context so I can follow up if it makes sense.";
+
+      const form = document.createElement("form");
+      form.className = "contact-handoff-form";
+
+      const fields = document.createElement("div");
+      fields.className = "contact-grid-form";
+      fields.append(
+        createContactField("Name", "name", { autocomplete: "name", placeholder: "Your name" }),
+        createContactField("Email", "email", {
+          autocomplete: "email",
+          placeholder: "you@example.com",
+          required: true,
+          type: "email",
+          value: handoff.email || ""
+        }),
+        createContactField("Company / role", "company", {
+          autocomplete: "organization",
+          placeholder: "Company, team, or role"
+        }),
+        createContactField("Interest summary", "summary", {
+          multiline: true,
+          required: true,
+          value: handoff.summary || "",
+          wide: true
+        })
+      );
+
+      const actions = document.createElement("div");
+      actions.className = "contact-actions-row";
+
+      const cancel = document.createElement("button");
+      cancel.className = "button button-secondary contact-cancel";
+      cancel.type = "button";
+      cancel.textContent = "Not now";
+
+      const submit = document.createElement("button");
+      submit.className = "button button-primary";
+      submit.type = "submit";
+      submit.textContent = handoff.cta || "Send summary to me";
+
+      actions.append(cancel, submit);
+      form.append(fields, actions);
+      card.append(title, intro, form);
+      chatLog.appendChild(card);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      return true;
+    }
+
+    async function submitContactForm(form) {
+      const submitButton = form.querySelector('button[type="submit"]');
+      const formData = new FormData(form);
+      const payload = {
+        name: (formData.get("name") || "").toString().trim(),
+        email: (formData.get("email") || "").toString().trim(),
+        company: (formData.get("company") || "").toString().trim(),
+        summary: (formData.get("summary") || "").toString().trim(),
+        history: conversationHistory.slice(-10),
+        page_context: {
+          positioning: siteContext.positioning,
+          summary: siteContext.summary,
+          context_version: siteContext.version
+        }
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending";
+      setChatStatus("thinking", "Sending");
+
+      try {
+        const response = await fetchWithTimeout(CONTACT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }, CONTACT_TIMEOUT_MS);
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          throw new Error(data.message || data.error || "Contact request failed");
+        }
+
+        form.closest(".contact-handoff")?.remove();
+        appendMessage("notice", data.message || "Sent. Thanks - I will see this conversation and your contact info.");
+      } catch (error) {
+        appendMessage("error", error.message || "I could not send that contact request. Please email me directly at bradshaw.braden@gmail.com.");
+        submitButton.disabled = false;
+        submitButton.textContent = "Send summary to me";
+      } finally {
+        setChatStatus("ready");
+        chatInput.focus();
+      }
     }
 
     async function loadChatContext() {
@@ -1999,6 +2216,7 @@
       if (!message) return;
 
       removeFollowUps();
+      removeContactHandoffs();
       appendMessage("user", message);
       conversationHistory.push({ role: "user", content: message });
       chatInput.value = "";
@@ -2043,7 +2261,10 @@
         const answer = data.response || "I could not find a response for that question.";
         pending.querySelector("p").textContent = answer;
         conversationHistory.push({ role: "assistant", content: answer });
-        renderFollowUps(data.suggested_followups || siteContext.follow_up_prompts);
+        const showedContactForm = renderContactHandoff(data.contact_handoff);
+        if (!showedContactForm) {
+          renderFollowUps(data.suggested_followups || siteContext.follow_up_prompts);
+        }
       } catch (error) {
         pending.remove();
         if (error.name === "AbortError") {
@@ -2075,6 +2296,17 @@
     chatLog.addEventListener("click", (event) => {
       const button = event.target.closest(".follow-up-chip");
       if (button) sendMessage(button.dataset.prompt || "");
+
+      const cancel = event.target.closest(".contact-cancel");
+      if (cancel) cancel.closest(".contact-handoff")?.remove();
+    });
+
+    chatLog.addEventListener("submit", (event) => {
+      const form = event.target.closest(".contact-handoff-form");
+      if (!form) return;
+
+      event.preventDefault();
+      submitContactForm(form);
     });
 
     chatForm.addEventListener("submit", (event) => {
