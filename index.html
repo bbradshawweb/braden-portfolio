@@ -525,7 +525,7 @@
     }
 
     .follow-up-chip {
-      animation: chipFadeIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: chipFadeIn 1.35s cubic-bezier(0.16, 1, 0.3, 1) both;
       background: white;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -562,7 +562,7 @@
     @keyframes messageFadeIn {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(8px);
       }
 
       to {
@@ -571,14 +571,21 @@
       }
     }
 
-    @keyframes textSegmentFade {
+    @keyframes responseTextReveal {
       from {
         opacity: 0;
-        transform: translateY(0.35rem);
+        filter: blur(4px);
+        transform: translateY(0.22rem);
+      }
+
+      65% {
+        opacity: 0.9;
+        filter: blur(0.4px);
       }
 
       to {
         opacity: 1;
+        filter: blur(0);
         transform: translateY(0);
       }
     }
@@ -688,7 +695,7 @@
     }
 
     .message {
-      animation: messageFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: messageFadeIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
       border-radius: var(--radius);
       max-width: 88%;
       padding: 0.72rem 0.85rem;
@@ -710,9 +717,9 @@
       white-space: pre-wrap;
     }
 
-    .message p .reveal-segment {
-      animation: textSegmentFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
-      display: inline;
+    .message p.is-revealing {
+      animation: responseTextReveal 1.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: opacity, filter, transform;
     }
 
     .message-assistant {
@@ -2045,40 +2052,9 @@
       if (body) body.textContent = text;
     }
 
-    function wait(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    function buildRevealSegments(text) {
-      const tokens = text.match(/\S+\s*/g) || [];
-      if (!tokens.length) return text ? [text] : [];
-
-      const segments = [];
-      let buffer = "";
-      let wordCount = 0;
-
-      tokens.forEach((token) => {
-        buffer += token;
-        if (/\S/.test(token)) wordCount += 1;
-
-        const trimmed = token.trim();
-        const hasLineBreak = token.includes("\n");
-        const sentenceEnd = /[.!?]$/.test(trimmed);
-        const phraseEnd = /[,;:]$/.test(trimmed);
-        const shouldBreak =
-          hasLineBreak ||
-          wordCount >= 5 ||
-          (wordCount >= 3 && (sentenceEnd || phraseEnd));
-
-        if (shouldBreak) {
-          segments.push(buffer);
-          buffer = "";
-          wordCount = 0;
-        }
-      });
-
-      if (buffer) segments.push(buffer);
-      return segments;
+    function revealDurationForText(text) {
+      const visibleCharacters = Array.from(text).filter((character) => character.trim()).length;
+      return Math.min(15000, Math.max(5200, visibleCharacters * 24));
     }
 
     async function revealMessage(message, text) {
@@ -2092,17 +2068,44 @@
       }
 
       body.textContent = "";
-      const segments = buildRevealSegments(text);
-      const delay = text.length > 900 ? 230 : 300;
+      body.classList.remove("is-revealing");
+      void body.offsetWidth;
+      body.classList.add("is-revealing");
 
-      for (const segment of segments) {
-        const revealSegment = document.createElement("span");
-        revealSegment.className = "reveal-segment";
-        revealSegment.textContent = segment;
-        body.appendChild(revealSegment);
-        chatLog.scrollTop = chatLog.scrollHeight;
-        await wait(delay);
-      }
+      const characters = Array.from(text);
+      const duration = revealDurationForText(text);
+      const startTime = performance.now();
+      let previousLength = 0;
+
+      await new Promise((resolve) => {
+        function animateFrame(now) {
+          if (!document.body.contains(message)) {
+            resolve();
+            return;
+          }
+
+          const progress = Math.min((now - startTime) / duration, 1);
+          const nextLength = Math.min(characters.length, Math.floor(characters.length * progress));
+
+          if (nextLength !== previousLength) {
+            body.textContent = characters.slice(0, nextLength).join("");
+            previousLength = nextLength;
+            chatLog.scrollTop = chatLog.scrollHeight;
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(animateFrame);
+            return;
+          }
+
+          body.textContent = text;
+          body.classList.remove("is-revealing");
+          chatLog.scrollTop = chatLog.scrollHeight;
+          resolve();
+        }
+
+        requestAnimationFrame(animateFrame);
+      });
     }
 
     function setChatBusy(isBusy) {
@@ -2174,7 +2177,7 @@
         button.className = "follow-up-chip";
         button.type = "button";
         button.dataset.prompt = item.prompt;
-        button.style.animationDelay = `${450 + index * 240}ms`;
+        button.style.animationDelay = `${700 + index * 360}ms`;
         button.textContent = item.label;
         row.appendChild(button);
       });
