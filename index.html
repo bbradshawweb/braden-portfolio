@@ -565,6 +565,20 @@
       margin: 0;
     }
 
+    .contact-summary-preview {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: #334155;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      margin: 0;
+      max-height: 7.5rem;
+      overflow: auto;
+      padding: 0.72rem;
+      white-space: pre-wrap;
+    }
+
     .contact-grid-form {
       display: grid;
       gap: 0.6rem;
@@ -2081,20 +2095,14 @@
       return wrapper;
     }
 
-    function renderContactHandoff(handoff) {
-      if (!handoff?.enabled) return false;
-
-      removeFollowUps();
-      removeContactHandoffs();
-
-      const card = document.createElement("section");
-      card.className = "contact-handoff";
+    function renderContactForm(card, handoff) {
+      card.replaceChildren();
 
       const title = document.createElement("h3");
       title.textContent = "Send me this conversation";
 
       const intro = document.createElement("p");
-      intro.textContent = "If this is worth continuing, review the summary and add your contact info. I will get the context so I can follow up if it makes sense.";
+      intro.textContent = "Review the summary, add your contact info, and I will get the context so I can follow up if it makes sense.";
 
       const form = document.createElement("form");
       form.className = "contact-handoff-form";
@@ -2138,6 +2146,44 @@
       actions.append(cancel, submit);
       form.append(fields, actions);
       card.append(title, intro, form);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function renderContactHandoff(handoff) {
+      if (!handoff?.enabled) return false;
+
+      removeFollowUps();
+      removeContactHandoffs();
+
+      const card = document.createElement("section");
+      card.className = "contact-handoff";
+      card.contactHandoff = handoff;
+
+      const title = document.createElement("h3");
+      title.textContent = "Worth sending me a summary?";
+
+      const intro = document.createElement("p");
+      intro.textContent = "This seems like it may be useful to continue. Would you like to review a short summary and send it with your contact info?";
+
+      const preview = document.createElement("pre");
+      preview.className = "contact-summary-preview";
+      preview.textContent = handoff.summary || "I can summarize this conversation and send it with your contact details.";
+
+      const actions = document.createElement("div");
+      actions.className = "contact-actions-row";
+
+      const cancel = document.createElement("button");
+      cancel.className = "button button-secondary contact-cancel";
+      cancel.type = "button";
+      cancel.textContent = "Not now";
+
+      const open = document.createElement("button");
+      open.className = "button button-primary contact-open";
+      open.type = "button";
+      open.textContent = "Yes, open form";
+
+      actions.append(cancel, open);
+      card.append(title, intro, preview, actions);
       chatLog.appendChild(card);
       chatLog.scrollTop = chatLog.scrollHeight;
       return true;
@@ -2177,7 +2223,7 @@
         form.closest(".contact-handoff")?.remove();
         appendMessage("notice", data.message || "Sent. Thanks - I will see this conversation and your contact info.");
       } catch (error) {
-        appendMessage("error", error.message || "I could not send that contact request. Please email me directly at bradshaw.braden@gmail.com.");
+        appendMessage("error", error.message || "I could not send this through the site yet. Your summary is still here, but please email me directly at bradshaw.braden@gmail.com for now.");
         submitButton.disabled = false;
         submitButton.textContent = "Send summary to me";
       } finally {
@@ -2299,6 +2345,12 @@
 
       const cancel = event.target.closest(".contact-cancel");
       if (cancel) cancel.closest(".contact-handoff")?.remove();
+
+      const open = event.target.closest(".contact-open");
+      if (open) {
+        const card = open.closest(".contact-handoff");
+        renderContactForm(card, card?.contactHandoff || {});
+      }
     });
 
     chatLog.addEventListener("submit", (event) => {
