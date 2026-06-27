@@ -591,6 +591,7 @@
     }
 
     .contact-handoff {
+      animation: messageFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
       align-self: stretch;
       background: #f7fbff;
       border: 1px solid var(--line);
@@ -613,18 +614,9 @@
       margin: 0;
     }
 
-    .contact-summary-preview {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: #334155;
-      font-size: 0.82rem;
-      line-height: 1.55;
-      margin: 0;
-      max-height: 7.5rem;
-      overflow: auto;
-      padding: 0.72rem;
-      white-space: pre-wrap;
+    .contact-handoff-form {
+      display: grid;
+      gap: 0.75rem;
     }
 
     .contact-grid-form {
@@ -2212,10 +2204,10 @@
       card.replaceChildren();
 
       const title = document.createElement("h3");
-      title.textContent = "Send me this conversation";
+      title.textContent = "Where should I follow up?";
 
       const intro = document.createElement("p");
-      intro.textContent = "Review the summary, add your contact info, and I will get the context so I can follow up if it makes sense.";
+      intro.textContent = "I will summarize the conversation in the background. Add your contact info and anything else you want me to know.";
 
       const form = document.createElement("form");
       form.className = "contact-handoff-form";
@@ -2235,10 +2227,9 @@
           autocomplete: "organization",
           placeholder: "Company, team, or role"
         }),
-        createContactField("Interest summary", "summary", {
+        createContactField("Anything else to add?", "additional_context", {
           multiline: true,
-          required: true,
-          value: handoff.summary || "",
+          placeholder: "Optional: timeline, role, project context, or what you would like to discuss.",
           wide: true
         })
       );
@@ -2254,7 +2245,7 @@
       const submit = document.createElement("button");
       submit.className = "button button-primary";
       submit.type = "submit";
-      submit.textContent = handoff.cta || "Send summary to me";
+      submit.textContent = handoff.cta || "Send to Braden";
 
       actions.append(cancel, submit);
       form.append(fields, actions);
@@ -2273,14 +2264,10 @@
       card.contactHandoff = handoff;
 
       const title = document.createElement("h3");
-      title.textContent = "Worth sending me a summary?";
+      title.textContent = "Want me to pass this along?";
 
       const intro = document.createElement("p");
-      intro.textContent = "This seems like it may be useful to continue. Would you like to review a short summary and send it with your contact info?";
-
-      const preview = document.createElement("pre");
-      preview.className = "contact-summary-preview";
-      preview.textContent = handoff.summary || "I can summarize this conversation and send it with your contact details.";
+      intro.textContent = "I can send Braden a concise summary of this conversation in the background. You only need to add contact details and anything else you want him to know.";
 
       const actions = document.createElement("div");
       actions.className = "contact-actions-row";
@@ -2293,10 +2280,10 @@
       const open = document.createElement("button");
       open.className = "button button-primary contact-open";
       open.type = "button";
-      open.textContent = "Yes, open form";
+      open.textContent = "Yes, add details";
 
       actions.append(cancel, open);
-      card.append(title, intro, preview, actions);
+      card.append(title, intro, actions);
       chatLog.appendChild(card);
       chatLog.scrollTop = chatLog.scrollHeight;
       return true;
@@ -2305,11 +2292,14 @@
     async function submitContactForm(form) {
       const submitButton = form.querySelector('button[type="submit"]');
       const formData = new FormData(form);
+      const card = form.closest(".contact-handoff");
+      const handoff = card?.contactHandoff || {};
       const payload = {
         name: (formData.get("name") || "").toString().trim(),
         email: (formData.get("email") || "").toString().trim(),
         company: (formData.get("company") || "").toString().trim(),
-        summary: (formData.get("summary") || "").toString().trim(),
+        additional_context: (formData.get("additional_context") || "").toString().trim(),
+        summary: (handoff.summary || "").toString().trim(),
         history: conversationHistory.slice(-10),
         page_context: {
           positioning: siteContext.positioning,
@@ -2333,12 +2323,12 @@
           throw new Error(data.message || data.error || "Contact request failed");
         }
 
-        form.closest(".contact-handoff")?.remove();
-        appendMessage("notice", data.message || "Sent. Thanks - I will see this conversation and your contact info.");
+        card?.remove();
+        appendMessage("notice", data.message || "Sent. Thanks - I will see this conversation, your contact info, and your note.");
       } catch (error) {
-        appendMessage("error", error.message || "I could not send this through the site yet. Your summary is still here, but please email me directly at bradshaw.braden@gmail.com for now.");
+        appendMessage("error", error.message || "I could not send this through the site yet. Please email me directly at bradshaw.braden@gmail.com for now.");
         submitButton.disabled = false;
-        submitButton.textContent = "Send summary to me";
+        submitButton.textContent = "Send to Braden";
       } finally {
         setChatStatus("ready");
         chatInput.focus();
