@@ -510,7 +510,7 @@
       align-self: flex-start;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.42rem;
+      gap: 0.5rem;
       margin-top: -0.25rem;
       max-width: 100%;
     }
@@ -525,6 +525,7 @@
     }
 
     .follow-up-chip {
+      animation: chipFadeIn 0.32s ease both;
       background: white;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -532,7 +533,11 @@
       cursor: pointer;
       font-size: 0.78rem;
       font-weight: 800;
-      padding: 0.38rem 0.58rem;
+      line-height: 1.25;
+      max-width: 100%;
+      padding: 0.48rem 0.68rem;
+      text-align: left;
+      white-space: normal;
     }
 
     .follow-up-chip:hover,
@@ -540,6 +545,18 @@
       border-color: var(--green);
       color: #08786d;
       outline: none;
+    }
+
+    @keyframes chipFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .contact-handoff {
@@ -663,7 +680,9 @@
 
     .message p {
       font-size: 0.92rem;
+      line-height: 1.55;
       margin: 0;
+      white-space: pre-wrap;
     }
 
     .message-assistant {
@@ -1987,6 +2006,43 @@
       return message;
     }
 
+    function messageBody(message) {
+      return message.querySelector("p");
+    }
+
+    function setMessageText(message, text) {
+      const body = messageBody(message);
+      if (body) body.textContent = text;
+    }
+
+    function wait(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function revealMessage(message, text) {
+      const body = messageBody(message);
+      if (!body) return;
+
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reducedMotion) {
+        body.textContent = text;
+        return;
+      }
+
+      body.textContent = "";
+      const chars = Array.from(text);
+      const chunkSize = text.length > 900 ? 5 : 3;
+      const delay = text.length > 900 ? 8 : 12;
+      let rendered = "";
+
+      for (let index = 0; index < chars.length; index += chunkSize) {
+        rendered += chars.slice(index, index + chunkSize).join("");
+        body.textContent = rendered;
+        chatLog.scrollTop = chatLog.scrollHeight;
+        await wait(delay);
+      }
+    }
+
     function setChatBusy(isBusy) {
       const button = chatForm.querySelector("button");
       chatInput.disabled = isBusy;
@@ -1996,17 +2052,8 @@
 
     function promptLabelFromText(prompt) {
       return prompt
-        .replace(/\?$/, "")
-        .replace(/^How has Braden /, "")
-        .replace(/^How have you /, "")
-        .replace(/^How do you /, "")
-        .replace(/^What do you /, "")
-        .replace(/^What analytics projects have you /, "analytics projects ")
-        .replace(/^What tools do you /, "tools ")
-        .replace(/^What /, "")
-        .replace(/^How /, "")
-        .replace(/^Which /, "")
-        .slice(0, 34);
+        .trim()
+        .replace(/\s+/g, " ");
     }
 
     function normalizePromptItem(item) {
@@ -2060,11 +2107,12 @@
       label.textContent = "Suggested follow-ups";
       row.appendChild(label);
 
-      normalized.forEach((item) => {
+      normalized.forEach((item, index) => {
         const button = document.createElement("button");
         button.className = "follow-up-chip";
         button.type = "button";
         button.dataset.prompt = item.prompt;
+        button.style.animationDelay = `${index * 90}ms`;
         button.textContent = item.label;
         row.appendChild(button);
       });
@@ -2273,10 +2321,7 @@
       let finalState = "ready";
       const wakingTimer = setTimeout(() => {
         if (document.body.contains(pending)) {
-          pending.querySelector("p").textContent = chatConfig(
-            "waking_message",
-            "waking assistant up"
-          );
+          setMessageText(pending, chatConfig("waking_message", "waking assistant up"));
           setChatStatus("waking");
         }
       }, 4500);
@@ -2305,7 +2350,8 @@
         }
 
         const answer = data.response || "I could not find a response for that question.";
-        pending.querySelector("p").textContent = answer;
+        clearTimeout(wakingTimer);
+        await revealMessage(pending, answer);
         conversationHistory.push({ role: "assistant", content: answer });
         const showedContactForm = renderContactHandoff(data.contact_handoff);
         if (!showedContactForm) {
