@@ -808,11 +808,12 @@
 
     .work-grid {
       display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.05rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .work-card {
+      animation: cardReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -821,7 +822,27 @@
       min-height: 100%;
       overflow: hidden;
       text-align: left;
-      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+      transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+    }
+
+    .work-card:nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .work-card:nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .work-card:nth-child(4) {
+      animation-delay: 240ms;
+    }
+
+    .work-card:nth-child(5) {
+      animation-delay: 320ms;
+    }
+
+    .work-card:nth-child(6) {
+      animation-delay: 400ms;
     }
 
     .work-card:hover,
@@ -829,6 +850,23 @@
       border-color: #b8c6d8;
       box-shadow: 0 14px 34px rgba(21, 42, 66, 0.1);
       transform: translateY(-2px);
+    }
+
+    .work-card.flagship-card {
+      align-items: stretch;
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.85fr);
+    }
+
+    .work-card.flagship-card .work-body {
+      padding: 1.15rem;
+    }
+
+    .work-card.flagship-card .work-media {
+      height: auto;
+      min-height: 360px;
+      order: 2;
     }
 
     .work-media {
@@ -844,6 +882,50 @@
       height: 100%;
       object-fit: cover;
       width: 100%;
+    }
+
+    .work-media.work-media-tall {
+      height: 250px;
+    }
+
+    .work-media.work-media-grid {
+      align-items: stretch;
+      display: grid;
+      gap: 0.6rem;
+      height: auto;
+      min-height: 0;
+      padding: 0.65rem;
+    }
+
+    .work-visual-grid {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+    }
+
+    .work-visual-grid.featured-preview {
+      grid-template-columns: minmax(0, 1fr) minmax(190px, 0.55fr);
+    }
+
+    .work-visual-grid.featured-preview > img:first-child {
+      grid-row: span 3;
+    }
+
+    .work-visual-grid img {
+      background: white;
+      border: 1px solid rgba(205, 217, 229, 0.85);
+      border-radius: 7px;
+      box-shadow: 0 8px 18px rgba(21, 42, 66, 0.08);
+      min-height: 0;
+      object-fit: cover;
+    }
+
+    .work-visual-note {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin: 0;
     }
 
     .system-preview {
@@ -876,6 +958,35 @@
     .system-row strong {
       color: var(--navy);
       font-size: 0.95rem;
+    }
+
+    .work-metrics {
+      display: grid;
+      gap: 0.55rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 0.2rem 0 0.8rem;
+    }
+
+    .work-metric {
+      background: #f7fbff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.7rem;
+    }
+
+    .work-metric strong {
+      color: var(--navy);
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1.1;
+      margin-bottom: 0.2rem;
+    }
+
+    .work-metric span {
+      color: var(--muted);
+      display: block;
+      font-size: 0.78rem;
+      line-height: 1.35;
     }
 
     .work-body {
@@ -921,6 +1032,14 @@
       padding-top: 0.85rem;
     }
 
+    .card-actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 0.85rem;
+    }
+
     .card-action {
       align-items: center;
       background: transparent;
@@ -930,8 +1049,11 @@
       display: inline-flex;
       font-weight: 900;
       gap: 0.25rem;
-      margin-top: 0.85rem;
       padding: 0;
+    }
+
+    .card-action-secondary {
+      color: var(--green);
     }
 
     .card-action:hover,
@@ -940,6 +1062,43 @@
       outline: none;
       text-decoration: underline;
       text-underline-offset: 0.2rem;
+    }
+
+    .support-work-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1.1rem;
+    }
+
+    .support-work-card {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+
+    .support-work-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .support-work-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    @keyframes cardReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .expertise-grid {
@@ -1143,7 +1302,13 @@
     }
 
     dialog[open] {
+      animation: dialogFadeIn 180ms ease both;
       display: block;
+    }
+
+    dialog.is-closing {
+      animation: dialogFadeOut 160ms ease both;
+      pointer-events: none;
     }
 
     dialog::backdrop {
@@ -1151,10 +1316,23 @@
       backdrop-filter: blur(4px);
     }
 
+    dialog[open]::backdrop {
+      animation: dialogBackdropIn 220ms ease both;
+    }
+
+    dialog.is-closing::backdrop {
+      animation: dialogBackdropOut 160ms ease both;
+    }
+
     .dialog-shell {
+      animation: dialogPanelIn 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
       background: white;
       max-height: min(86vh, 900px);
       overflow: auto;
+    }
+
+    dialog.is-closing .dialog-shell {
+      animation: dialogPanelOut 160ms ease both;
     }
 
     .dialog-header {
@@ -1188,6 +1366,21 @@
 
     .dialog-body {
       padding: 1.25rem;
+    }
+
+    .dialog-body > .case-study {
+      animation: caseContentIn 340ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+    }
+
+    .case-hero-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
+      margin-bottom: 1rem;
+    }
+
+    .case-hero-grid .case-metrics {
+      margin: 0;
     }
 
     .case-study h2 {
@@ -1262,6 +1455,41 @@
       width: 100%;
     }
 
+    .case-image-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 1rem 0;
+    }
+
+    .case-image-grid img {
+      height: 100%;
+      margin: 0;
+      object-fit: cover;
+    }
+
+    .case-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .case-actions .button {
+      cursor: pointer;
+    }
+
+    .case-note {
+      background: #f7fbff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #3b5168;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      margin: 1rem 0 0;
+      padding: 0.85rem;
+    }
+
     .case-study ul {
       color: #334356;
       margin-bottom: 0;
@@ -1277,6 +1505,82 @@
 
     .hidden-template {
       display: none;
+    }
+
+    @keyframes dialogFadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes dialogFadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes dialogBackdropIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes dialogBackdropOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes dialogPanelIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes dialogPanelOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+      }
+    }
+
+    @keyframes caseContentIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 980px) {
@@ -1312,6 +1616,21 @@
       }
 
       .work-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .work-card.flagship-card,
+      .work-visual-grid.featured-preview,
+      .case-hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-card.flagship-card .work-media {
+        min-height: 0;
+      }
+
+      .support-work-grid,
+      .case-image-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -1366,7 +1685,10 @@
 
       .impact-grid,
       .expertise-grid,
-      .work-grid {
+      .work-grid,
+      .work-metrics,
+      .support-work-grid,
+      .case-image-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1490,120 +1812,181 @@
       <div class="shell">
         <div class="section-heading">
           <div>
-            <div class="kicker">Featured work</div>
-            <h2>Case studies at the intersection of revenue systems, analytics, and customer behavior.</h2>
+            <div class="kicker">Featured Projects</div>
+            <h2>Systems that make revenue teams run better.</h2>
           </div>
           <p>
-            These projects show the operating layer behind the dashboards: data pipelines, CRM logic, automation, statistical modeling, and decision tools.
+            These deep dives focus on the operating layer behind the metrics: Salesforce tooling, predictive models, routing logic, manager visibility, marketing quality analysis, and behavioral feedback loops.
           </p>
         </div>
 
         <div class="work-grid">
+          <article class="work-card flagship-card">
+            <div class="work-body">
+              <div class="tag-row">
+                <span class="tag">Flagship 01</span>
+                <span class="tag">Salesforce</span>
+                <span class="tag">Rep Enablement</span>
+                <span class="tag">AI Review</span>
+              </div>
+              <h3>Salesforce Workcenter + Rep Enablement System</h3>
+              <p>A custom CRM workcenter that gives reps one place to manage leads, daily schedules, action history, personal stats, training insights, leaderboard context, AI call reviews, and smart meeting coverage.</p>
+              <div class="work-metrics">
+                <div class="work-metric"><strong>2x</strong><span>overall rep efficiency after adoption</span></div>
+                <div class="work-metric"><strong>50%</strong><span>reduction in missed customer communication</span></div>
+                <div class="work-metric"><strong>Live</strong><span>personalized training loop from stats and calls</span></div>
+              </div>
+              <div class="work-outcome">Rep-facing operating system for lead management, training, coverage, and accountability</div>
+              <div class="card-actions">
+                <button class="card-action" type="button" data-project="salesforce-workcenter">Open case study &rarr;</button>
+                <button class="card-action card-action-secondary" type="button" data-project-prompt="salesforce-workcenter" data-prompt="What did you build in your Salesforce Workcenter and how did it improve rep efficiency?">Ask my resume about this</button>
+              </div>
+            </div>
+            <div class="work-media work-media-grid">
+              <div class="work-visual-grid featured-preview">
+                <img src="project-assets/featured-projects/selective/workcenter-main-names-redacted.png" alt="Redacted preview of Salesforce workcenter lead management screen">
+                <img src="project-assets/featured-projects/selective/workcenter-insights-public.png" alt="Preview of training insights and suggested actions">
+                <img src="project-assets/featured-projects/selective/workcenter-call-review-public.png" alt="Preview of AI call review and quality score">
+                <img src="project-assets/featured-projects/selective/workcenter-stats-public.png" alt="Preview of rep stats page">
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card flagship-card">
+            <div class="work-body">
+              <div class="tag-row">
+                <span class="tag">Flagship 02</span>
+                <span class="tag">Manager Tools</span>
+                <span class="tag">Performance Ops</span>
+                <span class="tag">Probation Workflows</span>
+              </div>
+              <h3>Manager Console + Performance Operations System</h3>
+              <p>A live floor-activity console for managers and remote stakeholders, combining activity monitoring, probation controls, historical action review, and KPI leaderboards into a consolidated management layer.</p>
+              <div class="work-metrics">
+                <div class="work-metric"><strong>Live view</strong><span>remote visibility into rep status and floor activity</span></div>
+                <div class="work-metric"><strong>Controls</strong><span>opportunity limits tied to performance flags</span></div>
+                <div class="work-metric"><strong>KPI picker</strong><span>rankings for coaching, PIPs, and training decisions</span></div>
+              </div>
+              <div class="work-outcome">Manager-facing visibility that distinguishes effort problems from skill gaps</div>
+              <div class="card-actions">
+                <button class="card-action" type="button" data-project="manager-console">Open case study &rarr;</button>
+                <button class="card-action card-action-secondary" type="button" data-project-prompt="manager-console" data-prompt="How did you build the manager console and what decisions does it help managers make?">Ask my resume about manager tools</button>
+              </div>
+            </div>
+            <div class="work-media work-media-grid">
+              <div class="work-visual-grid">
+                <img src="project-assets/featured-projects/selective/manager-activity-names-redacted.png" alt="Redacted preview of manager activity console">
+                <img src="project-assets/featured-projects/selective/manager-performance-names-redacted.png" alt="Redacted preview of manager performance leaderboard">
+                <img src="project-assets/featured-projects/selective/manager-probations-names-redacted.png" alt="Redacted preview of manager probation controls">
+              </div>
+              <p class="work-visual-note">Names are redacted in public previews; the structure shows live activity, probation controls, and performance ranking.</p>
+            </div>
+          </article>
+
+          <article class="work-card flagship-card">
+            <div class="work-body">
+              <div class="tag-row">
+                <span class="tag">Flagship 03</span>
+                <span class="tag">Marketing Analytics</span>
+                <span class="tag">Lead Quality</span>
+                <span class="tag">Predictive Modeling</span>
+              </div>
+              <h3>Marketing Analytics + Lead Quality Intelligence</h3>
+              <p>A marketing analytics layer connecting campaign performance, UTM/event testing, lead quality, predictive close likelihood, pricing analysis, ad spend pacing, and revenue-impact decisions.</p>
+              <div class="work-metrics">
+                <div class="work-metric"><strong>14%</strong><span>stronger revenue event signal from a tested optimization</span></div>
+                <div class="work-metric"><strong>Quality</strong><span>monitoring by campaign, source, and medium</span></div>
+                <div class="work-metric"><strong>CPA</strong><span>pricing and placement analyses for better tradeoffs</span></div>
+              </div>
+              <div class="work-outcome">Growth analytics that connects marketing volume to lead quality, routing, and revenue</div>
+              <div class="card-actions">
+                <button class="card-action" type="button" data-project="marketing-analytics">Open case study &rarr;</button>
+                <button class="card-action card-action-secondary" type="button" data-project-prompt="marketing-analytics" data-prompt="What marketing analytics work have you done around lead quality, campaign performance, and revenue impact?">Ask my resume about marketing analytics</button>
+              </div>
+            </div>
+            <div class="work-media work-media-grid">
+              <div class="work-visual-grid">
+                <img src="project-assets/featured-projects/selective/pricing-analysis-public.png" alt="Preview of pricing analysis chart">
+                <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card">
+            <div class="work-media work-media-tall">
+              <img src="project-assets/featured-projects/selective/lead-throttle-public.png" alt="Preview of smart lead throttle configuration">
+            </div>
+            <div class="work-body">
+              <div class="tag-row">
+                <span class="tag">Model to Ops</span>
+                <span class="tag">Lead Scoring</span>
+                <span class="tag">Capacity Planning</span>
+              </div>
+              <h3>Predictive Lead Routing + Smart Lead Throttle</h3>
+              <p>A bridge between marketing analytics and revenue operations: close-likelihood prediction, capacity-aware lead release, booking-rate assumptions, and routing logic that controlled flow into the sales team.</p>
+              <div class="work-metrics">
+                <div class="work-metric"><strong>Within 2%</strong><span>predicted lead closing odds</span></div>
+                <div class="work-metric"><strong>+40%</strong><span>daily sale opportunity capacity</span></div>
+                <div class="work-metric"><strong>+20%</strong><span>revenue increase from smarter routing</span></div>
+              </div>
+              <div class="work-outcome">Predictive modeling connected directly to routing, scheduling, and revenue capacity</div>
+              <div class="card-actions">
+                <button class="card-action" type="button" data-project="predictive-routing">Open case study &rarr;</button>
+                <button class="card-action card-action-secondary" type="button" data-project-prompt="predictive-routing" data-prompt="How did your predictive lead model and smart lead throttle improve routing and sales capacity?">Ask my resume about lead routing</button>
+              </div>
+            </div>
+          </article>
+
           <article class="work-card">
             <div class="work-media" aria-hidden="true">
               <div class="system-preview">
-                <div class="system-row"><span>Lead scoring</span><strong>Live model</strong></div>
-                <div class="system-row"><span>Smart routing</span><strong>Probability-led</strong></div>
-                <div class="system-row"><span>Rep efficiency</span><strong>Monitored</strong></div>
-                <div class="system-row"><span>Probation systems</span><strong>Data-backed</strong></div>
+                <div class="system-row"><span>Wikipedia talk pages</span><strong>NLP toxicity</strong></div>
+                <div class="system-row"><span>Network ties</span><strong>Reciprocity proxy</strong></div>
+                <div class="system-row"><span>Biometrics</span><strong>Wearables</strong></div>
+                <div class="system-row"><span>Connection</span><strong>Behavioral scales</strong></div>
               </div>
             </div>
             <div class="work-body">
               <div class="tag-row">
-                <span class="tag">Revenue Ops</span>
-                <span class="tag">Salesforce</span>
-                <span class="tag">Automation</span>
-              </div>
-              <h3>Revenue Operations Intelligence Platform</h3>
-              <p>Built a connected operating layer for lead scoring, routing, rep efficiency, performance monitoring, probation workflows, dashboards, services, and integrations.</p>
-              <div class="work-outcome">Predictive routing + rep performance systems</div>
-              <button class="card-action" type="button" data-project="revops">Open case study &rarr;</button>
-            </div>
-          </article>
-
-          <article class="work-card">
-            <div class="work-media">
-              <img src="project-assets/project1/MTAExample.png" alt="Multi-touch attribution model dashboard screenshot">
-            </div>
-            <div class="work-body">
-              <div class="tag-row">
-                <span class="tag">Attribution</span>
-                <span class="tag">CRM</span>
-                <span class="tag">Modeling</span>
-              </div>
-              <h3>Sales funnel attribution model</h3>
-              <p>Unified web analytics, CRM activity, and sales data to quantify channel influence across the full customer funnel.</p>
-              <div class="work-outcome">15+ models for conversion targeting</div>
-              <button class="card-action" type="button" data-project="attribution">Open case study &rarr;</button>
-            </div>
-          </article>
-
-          <article class="work-card">
-            <div class="work-media">
-              <img src="project-assets/project3/Outreach Figma.png" alt="Customer outreach automation flow diagram">
-            </div>
-            <div class="work-body">
-              <div class="tag-row">
-                <span class="tag">Lifecycle</span>
-                <span class="tag">Flows</span>
-                <span class="tag">Webhooks</span>
-              </div>
-              <h3>Customer lifecycle automation</h3>
-              <p>Built and maintained multi-channel outreach logic across the customer journey with cleaner handoffs and leadership visibility.</p>
-              <div class="work-outcome">30% engagement and retention lift</div>
-              <button class="card-action" type="button" data-project="lifecycle">Open case study &rarr;</button>
-            </div>
-          </article>
-
-          <article class="work-card">
-            <div class="work-media">
-              <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
-            </div>
-            <div class="work-body">
-              <div class="tag-row">
-                <span class="tag">SEM</span>
-                <span class="tag">Retention</span>
+                <span class="tag">Research</span>
                 <span class="tag">Behavior</span>
+                <span class="tag">NLP</span>
               </div>
-              <h3>User engagement and retention model</h3>
-              <p>Modeled behavioral constructs behind engagement and retention to surface product gaps and guide audience targeting.</p>
-              <div class="work-outcome">Behavioral signals tied to outcomes</div>
-              <button class="card-action" type="button" data-project="sem">Open case study &rarr;</button>
+              <h3>Academic &amp; Behavioral Research</h3>
+              <p>Research depth across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and statistical communication.</p>
+              <div class="work-outcome">Measurement discipline behind the operating systems</div>
+              <div class="card-actions">
+                <button class="card-action" type="button" data-project="academic-research">Open research notes &rarr;</button>
+                <button class="card-action card-action-secondary" type="button" data-project-prompt="academic-research" data-prompt="How does your academic research background improve your analytics and revenue operations work?">Ask my resume about research</button>
+              </div>
             </div>
           </article>
+        </div>
 
-          <article class="work-card">
-            <div class="work-media">
-              <img src="project-assets/project7/Sales Performance Dashboard.png" alt="Sales performance dashboard screenshot">
-            </div>
-            <div class="work-body">
-              <div class="tag-row">
-                <span class="tag">Dashboards</span>
-                <span class="tag">Sigma</span>
-                <span class="tag">KPIs</span>
-              </div>
-              <h3>Executive dashboards and KPI systems</h3>
-              <p>Built reporting surfaces that connect marketing funnels, sales operations, product engagement, and leadership decisions.</p>
-              <div class="work-outcome">Company-wide KPI visibility</div>
-              <button class="card-action" type="button" data-project="dashboards">Open gallery &rarr;</button>
-            </div>
+        <div class="support-work-grid" aria-label="Additional project examples">
+          <article class="support-work-card">
+            <h3>Two-way integrations</h3>
+            <p>Outlook/Salesforce, Intercom/Salesforce, Intercom/Shopify, and Twilio/Salesforce integrations for cleaner employee and customer workflows.</p>
           </article>
-
-          <article class="work-card">
-            <div class="work-media">
-              <img src="project-assets/project7/Nonlinear Model.png" alt="Nonlinear model visualization screenshot">
-            </div>
-            <div class="work-body">
-              <div class="tag-row">
-                <span class="tag">Reporting</span>
-                <span class="tag">Statistics</span>
-                <span class="tag">Strategy</span>
-              </div>
-              <h3>Quarterly insight reporting</h3>
-              <p>Turned noisy, multi-source business questions into statistical deep dives, visual evidence, and action-ready recommendations.</p>
-              <div class="work-outcome">Analytical recommendations for leadership</div>
-              <button class="card-action" type="button" data-project="reporting">Open case study &rarr;</button>
-            </div>
+          <article class="support-work-card">
+            <h3>Review gathering automation</h3>
+            <p>Smart review collection workflows that improve reputation signals and automate post-customer touchpoints.</p>
+          </article>
+          <article class="support-work-card">
+            <h3>Ad-hoc decision analytics</h3>
+            <p>Analyses across text cadence, lifecycle email efficiency, contractor cost/benefit, survey writeups, and shareholder KPI reporting.</p>
+          </article>
+          <article class="support-work-card">
+            <h3>Pricing optimization</h3>
+            <p>Statistical product split, pricing, and placement analyses to identify stronger conversion, lead quality, and CPA tradeoffs.</p>
+          </article>
+          <article class="support-work-card">
+            <h3>Behavioral performance design</h3>
+            <p>Psychology-informed peer benchmarking, social proof, and accountability loops to improve rep performance and team standards.</p>
+          </article>
+          <article class="support-work-card">
+            <h3>SEM retention analysis</h3>
+            <p>Structural equation modeling and customer behavior analysis that connect latent engagement signals to product and retention decisions.</p>
           </article>
         </div>
       </div>
@@ -1730,224 +2113,263 @@
   </dialog>
 
   <div class="hidden-template" id="project-templates">
-    <article class="case-study" data-project-template="revops">
-      <h2>Revenue Operations Intelligence Platform</h2>
-      <p class="case-summary">
-        A connected operating system for revenue operations: predictive lead scoring, intelligent routing, rep efficiency monitoring, performance dashboards, probation and coaching signals, services, integrations, and admin workflows.
-      </p>
-      <div class="case-metrics">
-        <div class="case-metric"><strong>Lead scoring</strong><span>probability model informs smarter routing decisions</span></div>
-        <div class="case-metric"><strong>+40%</strong><span>revenue lead efficiency through routing, handoffs, and logistics</span></div>
-        <div class="case-metric"><strong>+20%</strong><span>team efficiency through monitoring and workflow design</span></div>
+    <article class="case-study" data-project-template="salesforce-workcenter" data-dialog-title="Salesforce Workcenter">
+      <h2>Salesforce Workcenter + Rep Enablement System</h2>
+      <div class="case-hero-grid">
+        <div>
+          <p class="case-summary">
+            I built a custom Salesforce workcenter for lead management and closing leads, giving reps one operating surface for leads, daily schedules, action history, personal stats, training insights, leaderboards, AI call review, and meeting coverage.
+          </p>
+          <div class="case-tools">
+            <span class="tag">Salesforce</span>
+            <span class="tag">Lead management</span>
+            <span class="tag">Rep enablement</span>
+            <span class="tag">AI call review</span>
+            <span class="tag">Peer benchmarking</span>
+            <span class="tag">Training insights</span>
+          </div>
+        </div>
+        <div class="case-metrics">
+          <div class="case-metric"><strong>2x</strong><span>overall rep efficiency after adoption</span></div>
+          <div class="case-metric"><strong>50%</strong><span>reduction in missed customer communication</span></div>
+          <div class="case-metric"><strong>Continuous</strong><span>personalized training from stats, calls, and notes</span></div>
+        </div>
+      </div>
+      <div class="case-image-grid">
+        <img src="project-assets/featured-projects/selective/workcenter-main-names-redacted.png" alt="Redacted preview of Salesforce workcenter lead management screen">
+        <img src="project-assets/featured-projects/selective/workcenter-insights-public.png" alt="Preview of training insights and suggested actions">
+        <img src="project-assets/featured-projects/selective/workcenter-call-review-public.png" alt="Preview of AI call review and quality score">
+        <img src="project-assets/featured-projects/selective/workcenter-stats-public.png" alt="Preview of rep stats page">
       </div>
       <div class="case-sections">
         <section class="case-section">
-          <h3>Core modules</h3>
+          <h3>Problem</h3>
+          <p>Rep work was fragmented across lead lists, outreach tools, schedules, call history, manager feedback, and performance context. That fragmentation slowed action and made coaching reactive.</p>
+        </section>
+        <section class="case-section">
+          <h3>What I Built</h3>
+          <p>A one-stop workcenter with action history, personal record and stats pages, daily schedule overviews, suggested actions, scheduled event aggregation, training meetings, and live-updating leaderboards.</p>
+        </section>
+        <section class="case-section">
+          <h3>Training Intelligence</h3>
+          <p>The training system compares reps with floor benchmarks and top performers, identifies behavioral and statistical gaps, and turns call reviews and notes into practical improvement feedback.</p>
+        </section>
+        <section class="case-section">
+          <h3>Coverage Logic</h3>
+          <p>I also built smart meeting coverage so reps with calls running long could release calls for other reps to claim, improving efficiency and reducing missed opportunities.</p>
+        </section>
+        <section class="case-section">
+          <h3>Impact</h3>
+          <p>After adoption, overall rep efficiency doubled, missed customer communication was cut in half, and rep performance improved as personalized training became part of the workflow.</p>
+        </section>
+        <section class="case-section">
+          <h3>Why It Matters</h3>
+          <p>This is the clearest example of my RevOps style: build the system, instrument the behavior, feed the signal back to the team, and make performance improvement operational.</p>
+        </section>
+      </div>
+      <div class="case-actions">
+        <button class="button button-primary" type="button" data-project-prompt="salesforce-workcenter" data-prompt="Give me the deep version of your Salesforce Workcenter project, including the efficiency results.">Ask my resume for the deep version</button>
+      </div>
+    </article>
+
+    <article class="case-study" data-project-template="manager-console" data-dialog-title="Manager Console">
+      <h2>Manager Console + Performance Operations System</h2>
+      <div class="case-hero-grid">
+        <div>
+          <p class="case-summary">
+            I created a manager-facing console that turns live rep activity, probation controls, historical actions, and KPI rankings into a consolidated view of floor efficiency and team effort.
+          </p>
           <div class="case-tools">
-            <span class="tag">Lead probability model</span>
-            <span class="tag">Intelligent routing</span>
-            <span class="tag">Rep efficiency</span>
-            <span class="tag">Performance monitoring</span>
+            <span class="tag">Manager tooling</span>
+            <span class="tag">Performance operations</span>
             <span class="tag">Probation workflows</span>
-            <span class="tag">Services and integrations</span>
+            <span class="tag">Historical activity</span>
+            <span class="tag">KPI leaderboard</span>
           </div>
-        </section>
+        </div>
+        <div class="case-metrics">
+          <div class="case-metric"><strong>Live floor view</strong><span>remote visibility into rep status, activity, and capacity</span></div>
+          <div class="case-metric"><strong>Probations</strong><span>structured controls for limiting opportunities when needed</span></div>
+          <div class="case-metric"><strong>Any KPI</strong><span>ranked stat picker for coaching and performance decisions</span></div>
+        </div>
+      </div>
+      <div class="case-image-grid">
+        <img src="project-assets/featured-projects/selective/manager-activity-names-redacted.png" alt="Redacted preview of manager activity console">
+        <img src="project-assets/featured-projects/selective/manager-performance-names-redacted.png" alt="Redacted preview of manager performance leaderboard">
+        <img src="project-assets/featured-projects/selective/manager-probations-names-redacted.png" alt="Redacted preview of manager probation controls">
+      </div>
+      <div class="case-sections">
         <section class="case-section">
           <h3>Problem</h3>
-          <p>Revenue operations work was spread across admin tasks, dashboards, routing logic, rep performance questions, coaching needs, and fragmented handoffs. Leadership needed a clearer way to see where process friction was costing revenue motion.</p>
+          <p>Managers needed the equivalent of watching the sales floor over a rep's shoulder, including remote visibility for stakeholders who were not physically present.</p>
         </section>
         <section class="case-section">
-          <h3>Action</h3>
-          <p>I built a functioning lead probability and scoring model, connected it to smarter routing logic, standardized calendars and handoffs, and created monitoring systems for rep efficiency, performance trends, and probation/coaching workflows.</p>
+          <h3>Activity Console</h3>
+          <p>The live activity tab consolidates rep status, schedules, current and next meetings, Twilio activity, Salesforce actions, and productivity signals into one operating view.</p>
         </section>
         <section class="case-section">
-          <h3>Tools</h3>
+          <h3>Probation Controls</h3>
+          <p>The probation tab makes it easy to limit a rep's opportunities when they are flagged for poor performance by other systems, keeping coaching decisions tied to evidence.</p>
+        </section>
+        <section class="case-section">
+          <h3>Historical Review</h3>
+          <p>Managers can review everything selected groups or individuals did over a given period, helping distinguish low performance caused by effort from low performance caused by skill gaps.</p>
+        </section>
+        <section class="case-section">
+          <h3>Performance Ranking</h3>
+          <p>The leaderboard and stat picker rank reps by selected KPIs, supporting informed decisions on probations, PIPs, and tailored training.</p>
+        </section>
+        <section class="case-section">
+          <h3>Business Value</h3>
+          <p>The console makes management more proactive: risk is visible earlier, good performance is easier to spot, and coaching can be pointed at the right behavior.</p>
+        </section>
+      </div>
+      <div class="case-actions">
+        <button class="button button-primary" type="button" data-project-prompt="manager-console" data-prompt="Explain your manager console and how it supports probations, PIPs, coaching, and floor efficiency.">Ask my resume about manager tooling</button>
+      </div>
+    </article>
+
+    <article class="case-study" data-project-template="marketing-analytics" data-dialog-title="Marketing Analytics">
+      <h2>Marketing Analytics + Lead Quality Intelligence</h2>
+      <div class="case-hero-grid">
+        <div>
+          <p class="case-summary">
+            I built marketing analytics around lead quality, campaign/source/medium performance, UTMs, pricing decisions, ad pacing, predictive close likelihood, and revenue impact.
+          </p>
           <div class="case-tools">
+            <span class="tag">Sigma</span>
             <span class="tag">Salesforce</span>
-            <span class="tag">SQL</span>
+            <span class="tag">UTMs</span>
+            <span class="tag">Lead quality</span>
+            <span class="tag">Pricing analysis</span>
             <span class="tag">Predictive modeling</span>
-            <span class="tag">CRM analytics</span>
-            <span class="tag">Behavioral data</span>
-            <span class="tag">Operational dashboards</span>
-            <span class="tag">Workflow automation</span>
           </div>
+        </div>
+        <div class="case-metrics">
+          <div class="case-metric"><strong>14%</strong><span>more effective tested event signal than the existing model</span></div>
+          <div class="case-metric"><strong>Quality over time</strong><span>campaign, source, and medium monitoring</span></div>
+          <div class="case-metric"><strong>Revenue lens</strong><span>marketing choices connected to close probability and routing</span></div>
+        </div>
+      </div>
+      <div class="case-image-grid">
+        <img src="project-assets/featured-projects/selective/pricing-analysis-public.png" alt="Preview of pricing analysis chart">
+        <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
+      </div>
+      <div class="case-sections">
+        <section class="case-section">
+          <h3>Problem</h3>
+          <p>Marketing reporting needed to move beyond volume. The business needed to know which campaigns and channels produced high-quality leads that actually converted.</p>
         </section>
         <section class="case-section">
-          <h3>Business impact</h3>
-          <p>The platform made lead ownership clearer, gave reps and managers better visibility into performance, improved response capacity, and turned RevOps from cleanup work into a measurable growth lever.</p>
+          <h3>What I Built</h3>
+          <p>I created dashboards and recurring analyses in Sigma and Salesforce to track quality trends, pacing to targets, campaign performance, and revenue-relevant lead outcomes.</p>
         </section>
+        <section class="case-section">
+          <h3>Model Connection</h3>
+          <p>The lead probability model gave marketing a quality lens: campaign and event performance could be evaluated by predicted close likelihood, not just form fills or traffic.</p>
+        </section>
+        <section class="case-section">
+          <h3>Event Optimization</h3>
+          <p>For a new event, I set up UTMs and connected inbound traffic and leads to the model. The new event measured 14% more effective than the existing model, supporting a strict 14% revenue lift with universal adoption.</p>
+        </section>
+        <section class="case-section">
+          <h3>Pricing and CPA</h3>
+          <p>I ran pricing and placement analyses to find tradeoffs that minimize CPA while maximizing lead quality and conversion opportunity.</p>
+        </section>
+        <section class="case-section">
+          <h3>Strategic Role</h3>
+          <p>The work informed campaign priorities, product and sales direction, budget allocation, and the routing logic that turns marketing signal into sales capacity.</p>
+        </section>
+      </div>
+      <div class="case-actions">
+        <button class="button button-primary" type="button" data-project-prompt="marketing-analytics" data-prompt="Walk me through your marketing analytics work, especially lead quality and the 14% event optimization.">Ask my resume about marketing analytics</button>
       </div>
     </article>
 
-    <article class="case-study" data-project-template="attribution">
-      <h2>Sales funnel attribution model</h2>
+    <article class="case-study" data-project-template="predictive-routing" data-dialog-title="Predictive Lead Routing">
+      <h2>Predictive Lead Routing + Smart Lead Throttle</h2>
+      <div class="case-hero-grid">
+        <div>
+          <p class="case-summary">
+            I connected a lead probability model to operational routing and capacity planning so leads could be released and prioritized intelligently instead of flowing blindly into the team.
+          </p>
+          <div class="case-tools">
+            <span class="tag">Lead scoring</span>
+            <span class="tag">Capacity planning</span>
+            <span class="tag">Routing prioritization</span>
+            <span class="tag">Calendar systems</span>
+            <span class="tag">Sales logistics</span>
+          </div>
+        </div>
+        <div class="case-metrics">
+          <div class="case-metric"><strong>Within 2%</strong><span>predicted a lead's odds of closing</span></div>
+          <div class="case-metric"><strong>+40%</strong><span>daily sale opportunity capacity</span></div>
+          <div class="case-metric"><strong>+20%</strong><span>revenue increase from smarter routing</span></div>
+        </div>
+      </div>
+      <img src="project-assets/featured-projects/selective/lead-throttle-public.png" alt="Preview of smart lead throttle configuration">
+      <div class="case-sections">
+        <section class="case-section">
+          <h3>Problem</h3>
+          <p>Lead volume, sales capacity, booking probability, and calendar availability needed to be balanced instead of treated as separate operational problems.</p>
+        </section>
+        <section class="case-section">
+          <h3>Predictive Model</h3>
+          <p>I created a predictive model that estimated a lead's odds of closing within 2%, then used that probability to inform routing decisions.</p>
+        </section>
+        <section class="case-section">
+          <h3>Smart Throttle</h3>
+          <p>The throttle released leads based on rep capacity and predicted booking rates, helping the team avoid overwhelming reps while still maximizing opportunity coverage.</p>
+        </section>
+        <section class="case-section">
+          <h3>Logistics Layer</h3>
+          <p>Alongside the model, I restructured calendars for performance-based meeting allocation and prioritization, standardized shifts, and enabled overbookings.</p>
+        </section>
+        <section class="case-section">
+          <h3>Impact</h3>
+          <p>The combined system increased daily sale opportunity capacity by 40% and produced a 20% revenue increase through smarter routing.</p>
+        </section>
+        <section class="case-section">
+          <h3>Why It Matters</h3>
+          <p>This project shows the full arc: statistical prediction, CRM logic, capacity planning, and measurable revenue operations impact.</p>
+        </section>
+      </div>
+      <div class="case-actions">
+        <button class="button button-primary" type="button" data-project-prompt="predictive-routing" data-prompt="Explain the predictive lead routing project, including the model accuracy, capacity increase, and revenue impact.">Ask my resume about predictive routing</button>
+      </div>
+    </article>
+
+    <article class="case-study" data-project-template="academic-research" data-dialog-title="Academic Research">
+      <h2>Academic &amp; Behavioral Research</h2>
       <p class="case-summary">
-        A custom multi-touch attribution model that connected acquisition, CRM activity, and transaction data so marketing decisions could be tied to full-funnel outcomes.
+        My research background gives my operations work a stronger measurement standard. I have worked across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and behavioral analysis.
       </p>
-      <img src="project-assets/project1/MTAExample.png" alt="Multi-touch attribution model dashboard screenshot">
       <div class="case-metrics">
-        <div class="case-metric"><strong>15+</strong><span>models generated to estimate and predict conversion rate</span></div>
-        <div class="case-metric"><strong>10+</strong><span>targeting opportunities surfaced for leadership</span></div>
-        <div class="case-metric"><strong>Weekly</strong><span>Sigma reporting cadence for marketing decisions</span></div>
+        <div class="case-metric"><strong>4,563</strong><span>talk interactions analyzed in pilot thesis data</span></div>
+        <div class="case-metric"><strong>627</strong><span>unique editors in the Wikipedia toxicity study</span></div>
+        <div class="case-metric"><strong>98%</strong><span>lower toxic-utterance odds for a fully reciprocal editor in the model</span></div>
       </div>
       <div class="case-sections">
         <section class="case-section">
-          <h3>Problem</h3>
-          <p>Channel performance was hard to evaluate because web analytics, Salesforce activity, and purchase outcomes lived in separate systems.</p>
+          <h3>Pilot Thesis Data</h3>
+          <p>I analyzed shock events, network ties, and discourse toxicity on Wikipedia talk pages using page-view validation, talk-page interactions, reciprocal network proxies, and NLP-based toxicity scoring.</p>
         </section>
         <section class="case-section">
-          <h3>Action</h3>
-          <p>I unified source, behavioral, demographic, CRM, and transaction fields into an analysis-ready table and used logistic regression to estimate conversion probabilities.</p>
+          <h3>Finding</h3>
+          <p>The evidence suggested shock events diluted the community with outsiders more than they radicalized insiders, while reciprocal interaction networks were associated with lower toxicity.</p>
         </section>
         <section class="case-section">
-          <h3>Tools</h3>
-          <div class="case-tools">
-            <span class="tag">Google Analytics</span>
-            <span class="tag">Salesforce</span>
-            <span class="tag">Sigma</span>
-            <span class="tag">SQL</span>
-            <span class="tag">Logistic regression</span>
-          </div>
+          <h3>Broader Research</h3>
+          <p>Beyond that project, my academic work includes biometric data, wearable devices, loneliness, social connection, survey scales, and behavioral measurement.</p>
         </section>
         <section class="case-section">
-          <h3>Business impact</h3>
-          <p>Leadership got a clearer view of which marketing and CRM paths were associated with higher conversion, creating more concrete targets for budget allocation and CPA improvement.</p>
+          <h3>How It Transfers</h3>
+          <p>That background shapes how I build business systems: define the behavior, instrument the process, test the signal, and communicate limitations clearly.</p>
         </section>
       </div>
-    </article>
-
-    <article class="case-study" data-project-template="lifecycle">
-      <h2>Customer lifecycle automation</h2>
-      <p class="case-summary">
-        A multi-channel outreach system built inside Salesforce to make customer communication more consistent across the full journey.
-      </p>
-      <img src="project-assets/project3/Outreach Figma.png" alt="Customer outreach automation flow diagram">
-      <div class="case-metrics">
-        <div class="case-metric"><strong>+30%</strong><span>customer engagement and retention lift</span></div>
-        <div class="case-metric"><strong>+20%</strong><span>full-funnel conversion rate improvement</span></div>
-        <div class="case-metric"><strong>Always-on</strong><span>SMS, email, drip, and internal workflow automation</span></div>
-      </div>
-      <div class="case-sections">
-        <section class="case-section">
-          <h3>Problem</h3>
-          <p>Customer outreach needed to be consistent and sequenced, but the journey had too many manual touchpoints and too little visibility for leadership iteration.</p>
-        </section>
-        <section class="case-section">
-          <h3>Action</h3>
-          <p>I mapped the cadence visually, implemented Salesforce Flow logic, connected webhooks, and maintained the system as the customer journey evolved.</p>
-        </section>
-        <section class="case-section">
-          <h3>Tools</h3>
-          <div class="case-tools">
-            <span class="tag">Salesforce Flows</span>
-            <span class="tag">Webhooks</span>
-            <span class="tag">SMS/email</span>
-            <span class="tag">Journey mapping</span>
-            <span class="tag">Figma</span>
-          </div>
-        </section>
-        <section class="case-section">
-          <h3>Business impact</h3>
-          <p>The automation improved consistency across the journey, reduced manual coordination, and gave the business a cleaner mechanism for testing and improving lifecycle communication.</p>
-        </section>
-      </div>
-    </article>
-
-    <article class="case-study" data-project-template="sem">
-      <h2>Structural equation model for engagement and retention</h2>
-      <p class="case-summary">
-        A large-scale SEM project connecting user behavior and analytics data to model retention and guide product improvements.
-      </p>
-      <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
-      <div class="case-sections">
-        <section class="case-section">
-          <h3>Problem</h3>
-          <p>User retention was influenced by less-visible behavioral constructs that could not be understood from surface metrics alone.</p>
-        </section>
-        <section class="case-section">
-          <h3>Action</h3>
-          <p>I modeled latent constructs for excitement, engagement, and issues, then connected those constructs to tangible retention outcomes.</p>
-        </section>
-        <section class="case-section">
-          <h3>Tools</h3>
-          <div class="case-tools">
-            <span class="tag">SEM</span>
-            <span class="tag">Latent variables</span>
-            <span class="tag">Retention modeling</span>
-            <span class="tag">Behavioral analytics</span>
-          </div>
-        </section>
-        <section class="case-section">
-          <h3>Business impact</h3>
-          <p>The model surfaced a product-expectation gap and helped guide onboarding, retention, and top-of-funnel audience strategy.</p>
-        </section>
-      </div>
-    </article>
-
-    <article class="case-study" data-project-template="dashboards">
-      <h2>Dashboards, charts, and visualizations</h2>
-      <p class="case-summary">
-        A sample gallery of analytical and exploratory reporting views used to clarify performance, surface trends, and support operating decisions.
-      </p>
-      <img src="project-assets/project7/Case Dashboard.png" alt="Case dashboard screenshot">
-      <img src="project-assets/project7/Running Submit Rate.png" alt="Running submit rate chart screenshot">
-      <img src="project-assets/project7/Sales Performance Dashboard.png" alt="Sales performance dashboard screenshot">
-      <div class="case-sections">
-        <section class="case-section">
-          <h3>Problem</h3>
-          <p>Teams needed scannable reporting that connected operational performance to practical decisions instead of burying signal in raw exports.</p>
-        </section>
-        <section class="case-section">
-          <h3>Action</h3>
-          <p>I built dashboards and visualizations around KPIs, performance patterns, and trend interpretation for leadership and operators.</p>
-        </section>
-        <section class="case-section">
-          <h3>Tools</h3>
-          <div class="case-tools">
-            <span class="tag">Sigma</span>
-            <span class="tag">Salesforce</span>
-            <span class="tag">Google Analytics</span>
-            <span class="tag">SQL</span>
-            <span class="tag">KPI design</span>
-          </div>
-        </section>
-        <section class="case-section">
-          <h3>Business impact</h3>
-          <p>Dashboards made funnel, sales, and customer signals more visible, helping stakeholders align on where performance was changing and why.</p>
-        </section>
-      </div>
-    </article>
-
-    <article class="case-study" data-project-template="reporting">
-      <h2>Quarterly insight reporting</h2>
-      <p class="case-summary">
-        A statistical deep dive into conversion-rate changes, with visualized KPIs, trend interpretation, and recommendations for business action.
-      </p>
-      <p>
-        <a class="button button-secondary" href="project-assets/project6/Q3 Q4 Comparison PDF Report.pdf" target="_blank" rel="noopener">Open report PDF</a>
-      </p>
-      <div class="case-sections">
-        <section class="case-section">
-          <h3>Problem</h3>
-          <p>A negative conversion-rate trend needed explanation, but the causes were spread across unrelated operational and customer data points.</p>
-        </section>
-        <section class="case-section">
-          <h3>Action</h3>
-          <p>I identified KPIs, compared business periods, separated noise from meaningful differences, and translated the analysis into recommendations.</p>
-        </section>
-        <section class="case-section">
-          <h3>Tools</h3>
-          <div class="case-tools">
-            <span class="tag">Statistical analysis</span>
-            <span class="tag">KPI reporting</span>
-            <span class="tag">Visualization</span>
-            <span class="tag">Executive reporting</span>
-          </div>
-        </section>
-        <section class="case-section">
-          <h3>Business impact</h3>
-          <p>The report turned a broad stakeholder concern into an evidence-backed decision path with clearer tradeoffs and action items.</p>
-        </section>
+      <p class="case-note">The research section is intentionally concise on the main site. It supports the portfolio by showing the behavioral and statistical discipline behind the revenue systems.</p>
+      <div class="case-actions">
+        <button class="button button-primary" type="button" data-project-prompt="academic-research" data-prompt="How does your academic research background show up in your analytics and revenue operations work?">Ask my resume about research</button>
       </div>
     </article>
   </div>
@@ -1968,10 +2390,47 @@
     const CONTEXT_TIMEOUT_MS = 10000;
     const CONTACT_TIMEOUT_MS = 15000;
     const conversationHistory = [];
+    const FEATURED_PROJECTS = {
+      "salesforce-workcenter": {
+        title: "Salesforce Workcenter + Rep Enablement System",
+        summary: "Custom Salesforce workcenter for lead management, daily schedules, action history, personal stats, training insights, leaderboards, AI call reviews, and smart meeting coverage.",
+        metrics: ["2x overall rep efficiency after adoption", "50% reduction in missed customer communication", "personalized training from stats, calls, and notes"],
+        tools: ["Salesforce", "CRM automation", "AI call review", "leaderboards", "performance benchmarking"],
+        details: "Built one operating surface for reps and used benchmarked stats, top-performer comparisons, call reviews, and suggested actions to improve rep performance over time."
+      },
+      "manager-console": {
+        title: "Manager Console + Performance Operations System",
+        summary: "Live manager console for floor activity, probation controls, historical action review, and KPI leaderboards.",
+        metrics: ["live remote visibility into rep activity", "probation controls for limiting opportunities", "KPI stat picker for coaching and PIP decisions"],
+        tools: ["Salesforce", "manager tooling", "performance operations", "historical activity review", "KPI leaderboards"],
+        details: "Built a consolidated management layer so managers can understand rep effort, capacity, and performance without watching the floor in person."
+      },
+      "marketing-analytics": {
+        title: "Marketing Analytics + Lead Quality Intelligence",
+        summary: "Marketing analytics layer connecting campaign quality, UTMs, source and medium performance, pricing analysis, lead probability, and revenue decisions.",
+        metrics: ["14% more effective tested event signal", "lead quality monitoring by campaign/source/medium", "pricing and placement analyses for CPA and lead quality tradeoffs"],
+        tools: ["Sigma", "Salesforce", "UTMs", "predictive modeling", "pricing analysis", "lead quality reporting"],
+        details: "Connected inbound traffic and leads to the lead probability model so marketing could judge quality and revenue impact instead of only volume."
+      },
+      "predictive-routing": {
+        title: "Predictive Lead Routing + Smart Lead Throttle",
+        summary: "Predictive lead close model connected to capacity-aware routing, smart lead release, calendar restructuring, and overbooking strategy.",
+        metrics: ["predicted a lead's odds of closing within 2%", "40% increase in daily sale opportunity capacity", "20% revenue increase from smarter routing"],
+        tools: ["predictive modeling", "Salesforce routing", "capacity planning", "calendar systems", "lead throttling"],
+        details: "Built a lead probability model and operational throttle so leads could be released intelligently based on capacity and predicted booking rates."
+      },
+      "academic-research": {
+        title: "Academic & Behavioral Research",
+        summary: "Research background across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and behavioral analysis.",
+        metrics: ["4,563 talk interactions analyzed", "627 unique editors", "98% lower toxic-utterance odds for a fully reciprocal editor in the model"],
+        tools: ["R", "Python", "NLP toxicity scoring", "survey scales", "network measures", "statistical modeling"],
+        details: "Academic research informs the way Braden defines behavior, instruments systems, tests signals, communicates limitations, and translates findings into practical decisions."
+      }
+    };
     let siteContext = {
       positioning: "Data Scientist | Revenue Operations",
-      summary: "Revenue Operations, data science, automation, analytics, and behavioral research",
-      initial_message: "Hi, ask me about my Revenue Operations Intelligence Platform, lead scoring and routing systems, data science projects, tools, research background, and resume highlights. What are you trying to evaluate first?",
+      summary: "Salesforce workcenter, manager console, lead scoring, routing, marketing analytics, automation, and behavioral research",
+      initial_message: "Hi, ask me about my Salesforce Workcenter, manager console, lead routing model, marketing analytics, research background, or resume highlights. What are you trying to evaluate first?",
       chat_config: {
         subtitle: "Interactive resume chat",
         placeholder: "Ask my resume about RevOps, analytics, automation, or research",
@@ -2360,9 +2819,39 @@
       }
     }
 
-    async function sendMessage(promptText) {
+    function buildPageContext(projectId = "") {
+      const project = FEATURED_PROJECTS[projectId] || null;
+      const context = {
+        positioning: siteContext.positioning,
+        summary: siteContext.summary,
+        context_version: siteContext.version,
+        page_section: project ? "featured project detail" : "portfolio chat",
+        featured_project_count: Object.keys(FEATURED_PROJECTS).length
+      };
+
+      if (project) {
+        context.selected_project_id = projectId;
+        context.selected_project_title = project.title;
+        context.selected_project_summary = project.summary;
+        context.selected_project_metrics = project.metrics.join(" | ");
+        context.selected_project_tools = project.tools.join(", ");
+        context.selected_project_details = project.details;
+      }
+
+      return context;
+    }
+
+    function focusChatPanel() {
+      document.getElementById("ask-ai")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => {
+        chatInput.focus({ preventScroll: true });
+      }, 420);
+    }
+
+    async function sendMessage(promptText, options = {}) {
       const message = (promptText || chatInput.value).trim();
       if (!message) return;
+      const projectId = options.projectId || "";
 
       removeFollowUps();
       removeContactHandoffs();
@@ -2388,11 +2877,7 @@
           body: JSON.stringify({
             message,
             history: conversationHistory.slice(-8),
-            page_context: {
-              positioning: siteContext.positioning,
-              summary: siteContext.summary,
-              context_version: siteContext.version
-            }
+            page_context: buildPageContext(projectId)
           })
         }, CHAT_TIMEOUT_MS);
 
@@ -2476,39 +2961,88 @@
 
     const dialog = document.getElementById("project-dialog");
     const dialogBody = document.getElementById("dialog-body");
+    const dialogTitle = document.getElementById("dialog-title");
     const dialogClose = document.querySelector(".dialog-close");
+    let dialogClosing = false;
 
-    document.querySelectorAll("[data-project]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const key = button.dataset.project;
-        const template = document.querySelector(`[data-project-template="${key}"]`);
-        if (!template) return;
+    function openProject(key) {
+      const template = document.querySelector(`[data-project-template="${key}"]`);
+      if (!template) return;
 
-        dialogBody.replaceChildren(template.cloneNode(true));
-        openProjectDialog();
-      });
-    });
+      const clone = template.cloneNode(true);
+      dialogTitle.textContent = template.dataset.dialogTitle || "Case study";
+      dialogBody.replaceChildren(clone);
+      openProjectDialog();
+    }
+
+    function askAboutProject(button) {
+      const projectId = button.dataset.projectPrompt || "";
+      const prompt = button.dataset.prompt || "";
+      if (!prompt) return;
+
+      if (dialog.hasAttribute("open")) {
+        closeProjectDialog();
+      }
+
+      focusChatPanel();
+      sendMessage(prompt, { projectId });
+    }
 
     function openProjectDialog() {
+      dialog.classList.remove("is-closing");
+      dialogClosing = false;
       if (typeof dialog.showModal === "function") {
         dialog.showModal();
       } else {
         dialog.setAttribute("open", "");
-        document.body.classList.add("modal-open");
       }
+      document.body.classList.add("modal-open");
     }
 
     function closeProjectDialog() {
-      if (typeof dialog.close === "function") {
-        dialog.close();
-      } else {
-        dialog.removeAttribute("open");
-        document.body.classList.remove("modal-open");
-      }
+      if (!dialog.hasAttribute("open") || dialogClosing) return;
+      dialogClosing = true;
+      dialog.classList.add("is-closing");
+
+      window.setTimeout(() => {
+        if (!dialog.hasAttribute("open")) return;
+
+        if (typeof dialog.close === "function") {
+          dialog.close();
+        } else {
+          dialog.removeAttribute("open");
+          document.body.classList.remove("modal-open");
+        }
+
+        dialog.classList.remove("is-closing");
+        dialogClosing = false;
+      }, 160);
     }
+
+    document.addEventListener("click", (event) => {
+      const projectPrompt = event.target.closest("[data-project-prompt]");
+      if (projectPrompt) {
+        event.preventDefault();
+        askAboutProject(projectPrompt);
+        return;
+      }
+
+      const projectButton = event.target.closest("[data-project]");
+      if (projectButton) {
+        event.preventDefault();
+        openProject(projectButton.dataset.project);
+      }
+    });
 
     dialog.addEventListener("close", () => {
       document.body.classList.remove("modal-open");
+      dialog.classList.remove("is-closing");
+      dialogClosing = false;
+    });
+
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeProjectDialog();
     });
 
     dialogClose.addEventListener("click", closeProjectDialog);
