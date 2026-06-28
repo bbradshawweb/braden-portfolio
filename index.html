@@ -879,6 +879,7 @@
     }
 
     .work-media img {
+      cursor: zoom-in;
       height: 100%;
       object-fit: cover;
       width: 100%;
@@ -906,6 +907,11 @@
 
     .work-visual-grid.featured-preview {
       grid-template-columns: minmax(0, 1fr) minmax(190px, 0.55fr);
+    }
+
+    .work-visual-grid.single-preview,
+    .case-image-grid.single-preview {
+      grid-template-columns: 1fr;
     }
 
     .work-visual-grid.featured-preview > img:first-child {
@@ -1451,8 +1457,18 @@
     .case-study img {
       border: 1px solid var(--line);
       border-radius: var(--radius);
+      cursor: zoom-in;
       margin: 1rem 0;
       width: 100%;
+    }
+
+    .work-media img:hover,
+    .work-media img:focus,
+    .case-study img:hover,
+    .case-study img:focus {
+      filter: saturate(1.05) contrast(1.02);
+      outline: 2px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 2px;
     }
 
     .case-image-grid {
@@ -1905,9 +1921,8 @@
               </div>
             </div>
             <div class="work-media work-media-grid">
-              <div class="work-visual-grid">
+              <div class="work-visual-grid single-preview">
                 <img src="project-assets/featured-projects/selective/pricing-analysis-public.png" alt="Preview of pricing analysis chart">
-                <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
               </div>
             </div>
           </article>
@@ -1938,13 +1953,8 @@
           </article>
 
           <article class="work-card">
-            <div class="work-media" aria-hidden="true">
-              <div class="system-preview">
-                <div class="system-row"><span>Wikipedia talk pages</span><strong>NLP toxicity</strong></div>
-                <div class="system-row"><span>Network ties</span><strong>Reciprocity proxy</strong></div>
-                <div class="system-row"><span>Biometrics</span><strong>Wearables</strong></div>
-                <div class="system-row"><span>Connection</span><strong>Behavioral scales</strong></div>
-              </div>
+            <div class="work-media work-media-tall">
+              <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram for engagement and retention analysis">
             </div>
             <div class="work-body">
               <div class="tag-row">
@@ -1953,7 +1963,7 @@
                 <span class="tag">NLP</span>
               </div>
               <h3>Academic &amp; Behavioral Research</h3>
-              <p>Research depth across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and statistical communication.</p>
+              <p>My research background gives my operations work a stronger measurement standard. I have worked across biometric data, wearable devices, loneliness, social connection and diverse scales, language toxicity, network ties, and behavioral analysis, often linking combinations of these to find and explore new outcomes.</p>
               <div class="work-outcome">Measurement discipline behind the operating systems</div>
               <div class="card-actions">
                 <button class="card-action" type="button" data-project="academic-research">Open research notes &rarr;</button>
@@ -2251,9 +2261,8 @@
           <div class="case-metric"><strong>Revenue lens</strong><span>marketing choices connected to close probability and routing</span></div>
         </div>
       </div>
-      <div class="case-image-grid">
+      <div class="case-image-grid single-preview">
         <img src="project-assets/featured-projects/selective/pricing-analysis-public.png" alt="Preview of pricing analysis chart">
-        <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram">
       </div>
       <div class="case-sections">
         <section class="case-section">
@@ -2342,12 +2351,15 @@
     <article class="case-study" data-project-template="academic-research" data-dialog-title="Academic Research">
       <h2>Academic &amp; Behavioral Research</h2>
       <p class="case-summary">
-        My research background gives my operations work a stronger measurement standard. I have worked across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and behavioral analysis.
+        My research background gives my operations work a stronger measurement standard. I have worked across biometric data, wearable devices, loneliness, social connection and diverse scales, language toxicity, network ties, and behavioral analysis, often linking combinations of these to find and explore new outcomes.
       </p>
       <div class="case-metrics">
         <div class="case-metric"><strong>4,563</strong><span>talk interactions analyzed in pilot thesis data</span></div>
         <div class="case-metric"><strong>627</strong><span>unique editors in the Wikipedia toxicity study</span></div>
         <div class="case-metric"><strong>98%</strong><span>lower toxic-utterance odds for a fully reciprocal editor in the model</span></div>
+      </div>
+      <div class="case-image-grid single-preview">
+        <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram for engagement and retention analysis">
       </div>
       <div class="case-sections">
         <section class="case-section">
@@ -2360,14 +2372,14 @@
         </section>
         <section class="case-section">
           <h3>Broader Research</h3>
-          <p>Beyond that project, my academic work includes biometric data, wearable devices, loneliness, social connection, survey scales, and behavioral measurement.</p>
+          <p>Beyond that project, my academic work includes biometric data, wearable devices, loneliness, social connection, diverse scales, behavioral measurement, and how combinations of those signals can reveal new outcomes.</p>
         </section>
         <section class="case-section">
           <h3>How It Transfers</h3>
           <p>That background shapes how I build business systems: define the behavior, instrument the process, test the signal, and communicate limitations clearly.</p>
         </section>
       </div>
-      <p class="case-note">The research section is intentionally concise on the main site. It supports the portfolio by showing the behavioral and statistical discipline behind the revenue systems.</p>
+      <p class="case-note">That research habit shows up in my business work: I look for the behavioral signal underneath the operational metric, then test whether the measurement is strong enough to guide a real decision.</p>
       <div class="case-actions">
         <button class="button button-primary" type="button" data-project-prompt="academic-research" data-prompt="How does your academic research background show up in your analytics and revenue operations work?">Ask my resume about research</button>
       </div>
@@ -2421,7 +2433,7 @@
       },
       "academic-research": {
         title: "Academic & Behavioral Research",
-        summary: "Research background across biometric data, wearable devices, loneliness, social connection and scales, language toxicity, network ties, and behavioral analysis.",
+        summary: "Research background across biometric data, wearable devices, loneliness, social connection and diverse scales, language toxicity, network ties, and behavioral analysis, often linking combinations of these to find and explore new outcomes.",
         metrics: ["4,563 talk interactions analyzed", "627 unique editors", "98% lower toxic-utterance odds for a fully reciprocal editor in the model"],
         tools: ["R", "Python", "NLP toxicity scoring", "survey scales", "network measures", "statistical modeling"],
         details: "Academic research informs the way Braden defines behavior, instruments systems, tests signals, communicates limitations, and translates findings into practical decisions."
@@ -2965,6 +2977,23 @@
     const dialogClose = document.querySelector(".dialog-close");
     let dialogClosing = false;
 
+    function prepareZoomImages(container = document) {
+      container.querySelectorAll("#work .work-media img, .case-study img").forEach((image) => {
+        image.tabIndex = 0;
+        image.setAttribute("role", "button");
+        image.setAttribute("title", "Open full-size image");
+        image.setAttribute("aria-label", `${image.alt || "Project image"} - open full-size image`);
+      });
+    }
+
+    function openZoomImage(image) {
+      const source = image.getAttribute("src");
+      if (!source) return;
+
+      const url = new URL(source, window.location.href).href;
+      window.open(url, "_blank", "noopener");
+    }
+
     function openProject(key) {
       const template = document.querySelector(`[data-project-template="${key}"]`);
       if (!template) return;
@@ -2972,6 +3001,7 @@
       const clone = template.cloneNode(true);
       dialogTitle.textContent = template.dataset.dialogTitle || "Case study";
       dialogBody.replaceChildren(clone);
+      prepareZoomImages(dialogBody);
       openProjectDialog();
     }
 
@@ -3020,6 +3050,13 @@
     }
 
     document.addEventListener("click", (event) => {
+      const zoomImage = event.target.closest("#work .work-media img, .case-study img");
+      if (zoomImage) {
+        event.preventDefault();
+        openZoomImage(zoomImage);
+        return;
+      }
+
       const projectPrompt = event.target.closest("[data-project-prompt]");
       if (projectPrompt) {
         event.preventDefault();
@@ -3033,6 +3070,18 @@
         openProject(projectButton.dataset.project);
       }
     });
+
+    document.addEventListener("keydown", (event) => {
+      if (!["Enter", " "].includes(event.key)) return;
+
+      const zoomImage = event.target.closest?.("#work .work-media img, .case-study img");
+      if (!zoomImage) return;
+
+      event.preventDefault();
+      openZoomImage(zoomImage);
+    });
+
+    prepareZoomImages();
 
     dialog.addEventListener("close", () => {
       document.body.classList.remove("modal-open");
