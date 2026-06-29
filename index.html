@@ -1380,6 +1380,61 @@
       animation: caseContentIn 340ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
     }
 
+    #image-dialog {
+      background: transparent;
+      box-shadow: none;
+      max-width: min(calc(100vw - 2rem), 1280px);
+      width: min(calc(100vw - 2rem), 1280px);
+    }
+
+    .image-dialog-shell {
+      animation: dialogPanelIn 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      background: white;
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      max-height: min(92vh, 980px);
+      overflow: hidden;
+    }
+
+    #image-dialog.is-closing .image-dialog-shell {
+      animation: dialogPanelOut 160ms ease both;
+    }
+
+    .image-dialog-header {
+      gap: 0.8rem;
+    }
+
+    .image-dialog-actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: flex-end;
+    }
+
+    .image-dialog-actions .button {
+      font-size: 0.84rem;
+      padding: 0.48rem 0.7rem;
+    }
+
+    .image-dialog-body {
+      align-items: center;
+      background: #0f172a;
+      display: flex;
+      justify-content: center;
+      max-height: calc(92vh - 68px);
+      overflow: auto;
+      padding: 0.75rem;
+    }
+
+    .image-dialog-body img {
+      border-radius: 5px;
+      max-height: calc(92vh - 96px);
+      object-fit: contain;
+      width: auto;
+    }
+
     .case-hero-grid {
       display: grid;
       gap: 1rem;
@@ -2128,6 +2183,21 @@
         <button class="dialog-close" type="button" aria-label="Close case study">X</button>
       </div>
       <div id="dialog-body" class="dialog-body"></div>
+    </div>
+  </dialog>
+
+  <dialog id="image-dialog" aria-labelledby="image-dialog-title">
+    <div class="image-dialog-shell">
+      <div class="dialog-header image-dialog-header">
+        <strong id="image-dialog-title">Project image</strong>
+        <div class="image-dialog-actions">
+          <a class="button button-secondary" id="image-dialog-open" href="#" target="_blank" rel="noopener">Open in new tab</a>
+          <button class="dialog-close" id="image-dialog-close" type="button" aria-label="Close expanded image">X</button>
+        </div>
+      </div>
+      <div class="image-dialog-body">
+        <img id="image-dialog-image" src="" alt="">
+      </div>
     </div>
   </dialog>
 
@@ -2980,15 +3050,21 @@
     const dialog = document.getElementById("project-dialog");
     const dialogBody = document.getElementById("dialog-body");
     const dialogTitle = document.getElementById("dialog-title");
-    const dialogClose = document.querySelector(".dialog-close");
+    const dialogClose = document.querySelector("#project-dialog .dialog-close");
+    const imageDialog = document.getElementById("image-dialog");
+    const imageDialogImage = document.getElementById("image-dialog-image");
+    const imageDialogTitle = document.getElementById("image-dialog-title");
+    const imageDialogOpen = document.getElementById("image-dialog-open");
+    const imageDialogClose = document.getElementById("image-dialog-close");
     let dialogClosing = false;
+    let imageDialogClosing = false;
 
     function prepareZoomImages(container = document) {
       container.querySelectorAll("#work .work-media img, #work .support-work-card img, .case-study img").forEach((image) => {
         image.tabIndex = 0;
         image.setAttribute("role", "button");
-        image.setAttribute("title", "Open full-size image");
-        image.setAttribute("aria-label", `${image.alt || "Project image"} - open full-size image`);
+        image.setAttribute("title", "Expand image");
+        image.setAttribute("aria-label", `${image.alt || "Project image"} - expand image`);
       });
     }
 
@@ -2997,7 +3073,44 @@
       if (!source) return;
 
       const url = new URL(source, window.location.href).href;
-      window.open(url, "_blank", "noopener");
+      const label = image.alt || "Project image";
+      imageDialogTitle.textContent = label;
+      imageDialogImage.src = url;
+      imageDialogImage.alt = label;
+      imageDialogOpen.href = url;
+      imageDialog.classList.remove("is-closing");
+      imageDialogClosing = false;
+
+      if (typeof imageDialog.showModal === "function") {
+        imageDialog.showModal();
+      } else {
+        imageDialog.setAttribute("open", "");
+      }
+
+      document.body.classList.add("modal-open");
+      imageDialogClose.focus();
+    }
+
+    function closeImageDialog() {
+      if (!imageDialog.hasAttribute("open") || imageDialogClosing) return;
+      imageDialogClosing = true;
+      imageDialog.classList.add("is-closing");
+
+      window.setTimeout(() => {
+        if (!imageDialog.hasAttribute("open")) return;
+
+        if (typeof imageDialog.close === "function") {
+          imageDialog.close();
+        } else {
+          imageDialog.removeAttribute("open");
+          if (!dialog.hasAttribute("open")) {
+            document.body.classList.remove("modal-open");
+          }
+        }
+
+        imageDialog.classList.remove("is-closing");
+        imageDialogClosing = false;
+      }, 160);
     }
 
     function openProject(key) {
@@ -3090,7 +3203,9 @@
     prepareZoomImages();
 
     dialog.addEventListener("close", () => {
-      document.body.classList.remove("modal-open");
+      if (!imageDialog.hasAttribute("open")) {
+        document.body.classList.remove("modal-open");
+      }
       dialog.classList.remove("is-closing");
       dialogClosing = false;
     });
@@ -3103,6 +3218,25 @@
     dialogClose.addEventListener("click", closeProjectDialog);
     dialog.addEventListener("click", (event) => {
       if (event.target === dialog) closeProjectDialog();
+    });
+
+    imageDialog.addEventListener("close", () => {
+      if (!dialog.hasAttribute("open")) {
+        document.body.classList.remove("modal-open");
+      }
+      imageDialog.classList.remove("is-closing");
+      imageDialogClosing = false;
+      imageDialogImage.removeAttribute("src");
+    });
+
+    imageDialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeImageDialog();
+    });
+
+    imageDialogClose.addEventListener("click", closeImageDialog);
+    imageDialog.addEventListener("click", (event) => {
+      if (event.target === imageDialog) closeImageDialog();
     });
 
     document.getElementById("year").textContent = new Date().getFullYear();
