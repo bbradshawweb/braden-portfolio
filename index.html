@@ -927,13 +927,6 @@
       object-fit: cover;
     }
 
-    .work-visual-note {
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.45;
-      margin: 0;
-    }
-
     .system-preview {
       background:
         linear-gradient(135deg, rgba(37, 99, 235, 0.12), transparent 45%),
@@ -1082,6 +1075,15 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 1rem;
+    }
+
+    .support-work-card img {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      cursor: zoom-in;
+      display: block;
+      margin-bottom: 0.85rem;
+      width: 100%;
     }
 
     .support-work-card h3 {
@@ -1464,6 +1466,8 @@
 
     .work-media img:hover,
     .work-media img:focus,
+    .support-work-card img:hover,
+    .support-work-card img:focus,
     .case-study img:hover,
     .case-study img:focus {
       filter: saturate(1.05) contrast(1.02);
@@ -1895,7 +1899,6 @@
                 <img src="project-assets/featured-projects/selective/manager-performance-names-redacted.png" alt="Redacted preview of manager performance leaderboard">
                 <img src="project-assets/featured-projects/selective/manager-probations-names-redacted.png" alt="Redacted preview of manager probation controls">
               </div>
-              <p class="work-visual-note">Names are redacted in public previews; the structure shows live activity, probation controls, and performance ranking.</p>
             </div>
           </article>
 
@@ -1953,8 +1956,13 @@
           </article>
 
           <article class="work-card">
-            <div class="work-media work-media-tall">
-              <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram for engagement and retention analysis">
+            <div class="work-media" aria-hidden="true">
+              <div class="system-preview">
+                <div class="system-row"><span>Wikipedia talk pages</span><strong>NLP toxicity</strong></div>
+                <div class="system-row"><span>Network ties</span><strong>Reciprocity proxy</strong></div>
+                <div class="system-row"><span>Biometrics</span><strong>Wearables</strong></div>
+                <div class="system-row"><span>Connection</span><strong>Behavioral scales</strong></div>
+              </div>
             </div>
             <div class="work-body">
               <div class="tag-row">
@@ -1996,6 +2004,7 @@
           </article>
           <article class="support-work-card">
             <h3>SEM retention analysis</h3>
+            <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram for engagement and retention analysis">
             <p>Structural equation modeling and customer behavior analysis that connect latent engagement signals to product and retention decisions.</p>
           </article>
         </div>
@@ -2357,9 +2366,6 @@
         <div class="case-metric"><strong>4,563</strong><span>talk interactions analyzed in pilot thesis data</span></div>
         <div class="case-metric"><strong>627</strong><span>unique editors in the Wikipedia toxicity study</span></div>
         <div class="case-metric"><strong>98%</strong><span>lower toxic-utterance odds for a fully reciprocal editor in the model</span></div>
-      </div>
-      <div class="case-image-grid single-preview">
-        <img src="project-assets/project5/SEMPath.png" alt="Structural equation model path diagram for engagement and retention analysis">
       </div>
       <div class="case-sections">
         <section class="case-section">
@@ -2978,7 +2984,7 @@
     let dialogClosing = false;
 
     function prepareZoomImages(container = document) {
-      container.querySelectorAll("#work .work-media img, .case-study img").forEach((image) => {
+      container.querySelectorAll("#work .work-media img, #work .support-work-card img, .case-study img").forEach((image) => {
         image.tabIndex = 0;
         image.setAttribute("role", "button");
         image.setAttribute("title", "Open full-size image");
@@ -3050,7 +3056,7 @@
     }
 
     document.addEventListener("click", (event) => {
-      const zoomImage = event.target.closest("#work .work-media img, .case-study img");
+      const zoomImage = event.target.closest("#work .work-media img, #work .support-work-card img, .case-study img");
       if (zoomImage) {
         event.preventDefault();
         openZoomImage(zoomImage);
@@ -3074,7 +3080,7 @@
     document.addEventListener("keydown", (event) => {
       if (!["Enter", " "].includes(event.key)) return;
 
-      const zoomImage = event.target.closest?.("#work .work-media img, .case-study img");
+      const zoomImage = event.target.closest?.("#work .work-media img, #work .support-work-card img, .case-study img");
       if (!zoomImage) return;
 
       event.preventDefault();
